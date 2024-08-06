@@ -21,6 +21,14 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "electron-src/tsconfig.json",
+    "electron/src/main.js",
+    "electron/src/main.ts.js"
+  ],
   "exclude": ["node_modules"]
 }

@@ -2,24 +2,30 @@
   "name": "water360",
   "version": "0.1.0",
   "private": true,
+  "main": "electron/main/main.js",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "postbuild": "cp -R public .next/standalone && cp -R .next/static .next/standalone/.next",
     "start": "next start",
+    "build-electron": "tsc -p electron/src",
+    "start-electron": "npm run build-electron && electron .",
     "lint": "next lint"
   },
   "dependencies": {
+    "@electron-toolkit/utils": "^3.0.0",
     "@mantine/core": "^7.11.2",
     "@mantine/hooks": "^7.11.2",
     "@mantine/notifications": "^7.11.2",
     "@react-three/drei": "^9.109.2",
     "@react-three/fiber": "^8.16.8",
     "@tabler/icons-react": "^3.11.0",
+    "@typescript-eslint/parser": "^8.0.1",
     "@yume-chan/adb": "^0.0.24",
     "@yume-chan/adb-server-node-tcp": "^0.0.24",
     "@yume-chan/stream-extra": "^0.0.24",
     "command-exists": "^1.2.9",
+    "get-port-please": "^3.1.2",
     "net": "^1.0.2",
     "next": "14.2.5",
     "node-persist": "^4.0.3",
@@ -31,20 +37,62 @@
     "ws": "^8.18.0"
   },
   "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "@types/ws": "^8.5.12",
     "@types/command-exists": "^1.2.3",
+    "@types/node": "^20",
     "@types/node-persist": "^3.1.8",
     "@types/ping": "^0.4.4",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
     "@types/three": "^0.167.1",
     "@types/wake_on_lan": "^0.0.33",
+    "@types/ws": "^8.5.12",
+    "electron": "^31.3.1",
+    "electron-builder": "^24.13.3",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
     "postcss": "^8.4.40",
     "postcss-preset-mantine": "^1.17.0",
     "postcss-simple-vars": "^7.0.1",
     "typescript": "^5"
+  },
+  "build": {
+    "asar": true,
+    "executableName": "NextJSElectron",
+    "appId": "com.saybackend.nextjs-electron",
+    "asarUnpack": [
+      "node_modules/next",
+      "node_modules/@img",
+      "**\\*.{node,dll}"
+    ],
+    "files": [
+      "build",
+      {
+        "from": ".next/standalone",
+        "to": "app",
+        "filter": [
+          "!**/.env",
+          "!**/package.json"
+        ]
+      },
+      {
+        "from": ".next/static",
+        "to": "app/.next/static"
+      },
+      {
+        "from": "public",
+        "to": "app/public"
+      }
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "linux": {
+      "target": [
+        "deb"
+      ],
+      "category": "Development"
+    }
   }
 }
