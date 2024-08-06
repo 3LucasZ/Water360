@@ -112,7 +112,7 @@ export default function Home() {
             <Button
               radius={"xl"}
               onClick={() => {
-                api("/khadas/connect");
+                api("/khadas/adbConnect");
               }}
               maw={300}
             >
