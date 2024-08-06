@@ -4,10 +4,11 @@
   "private": true,
   "main": "electron/main/main.js",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "postbuild": "cp -R public .next/standalone && cp -R .next/static .next/standalone/.next",
-    "start": "next start",
+    "dist": "electron-builder",
+    "dev-next": "next dev",
+    "build-next": "next build",
+    "postbuild-next": "cp -R public .next/standalone && cp -R .next/static .next/standalone/.next",
+    "start-next": "next start",
     "build-electron": "tsc -p electron/src",
     "start-electron": "npm run build-electron && electron .",
     "lint": "next lint"
@@ -56,43 +57,19 @@
     "typescript": "^5"
   },
   "build": {
-    "asar": true,
-    "executableName": "NextJSElectron",
-    "appId": "com.saybackend.nextjs-electron",
-    "asarUnpack": [
-      "node_modules/next",
-      "node_modules/@img",
-      "**\\*.{node,dll}"
-    ],
-    "files": [
-      "build",
-      {
-        "from": ".next/standalone",
-        "to": "app",
-        "filter": [
-          "!**/.env",
-          "!**/package.json"
-        ]
-      },
-      {
-        "from": ".next/static",
-        "to": "app/.next/static"
-      },
-      {
-        "from": "public",
-        "to": "app/public"
-      }
-    ],
-    "win": {
-      "target": [
-        "nsis"
-      ]
+    "appId": "com.questinstitute.water360",
+    "dmg": {
+      "title": "${productName} ${version}"
     },
     "linux": {
       "target": [
+        "AppImage",
         "deb"
-      ],
-      "category": "Development"
+      ]
+    },
+    "win": {
+      "target": "NSIS",
+      "icon": "build/icon.ico"
     }
   }
 }

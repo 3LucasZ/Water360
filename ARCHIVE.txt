@@ -1,0 +1,40 @@
+ "build": {
+    "asar": true,
+    "executableName": "NextJSElectron",
+    "appId": "com.saybackend.nextjs-electron",
+    "asarUnpack": [
+      "node_modules/next",
+      "node_modules/@img",
+      "**\\*.{node,dll}"
+    ],
+    "files": [
+      "build",
+      {
+        "from": ".next/standalone",
+        "to": "app",
+        "filter": [
+          "!**/.env",
+          "!**/package.json"
+        ]
+      },
+      {
+        "from": ".next/static",
+        "to": "app/.next/static"
+      },
+      {
+        "from": "public",
+        "to": "app/public"
+      }
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "linux": {
+      "target": [
+        "deb"
+      ],
+      "category": "Development"
+    }
+  }
