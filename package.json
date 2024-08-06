@@ -70,6 +70,20 @@
     "win": {
       "target": "NSIS",
       "icon": "build/icon.ico"
+    },
+    "files": [
+      "electron/main",
+      {
+        "from": ".next/standalone",
+        "to": "app",
+        "filter": [
+          "!**/.env",
+          "!**/package.json"
+        ]
+      }
+    ],
+    "extraMetadata": {
+      "main": "electron/main/main.js"
     }
   }
 }
