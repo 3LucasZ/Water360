@@ -1,0 +1,14 @@
+body {
+  /* TODO: in production, uncomment user-select so that users can't select text
+  /* user-select: none;
+  -webkit-user-select: none; 
+  -ms-user-select: none; */
+  cursor: default;
+}
+::-webkit-scrollbar {
+  display: none;
+}
+a {
+  -webkit-user-drag: none;
+  -ms-user-drag: none;
+}
