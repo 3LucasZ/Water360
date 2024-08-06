@@ -30,8 +30,6 @@ import {
   IconFileInfo,
   IconTrash,
 } from "@tabler/icons-react";
-import { BaseDirectory, readDir } from "@tauri-apps/api/fs";
-import { convertFileSrc } from "@tauri-apps/api/tauri";
 import { lstat } from "fs";
 import { data } from "node-persist";
 import { useEffect, useState } from "react";
@@ -41,17 +39,19 @@ export default function Home() {
   const [tarUrl, setTarUrl] = useState("");
   const tarUrlSuffix = tarUrl.split(".").pop();
   useEffect(() => {
-    function getServerSideProps() {
-      readDir("Water360", { dir: BaseDirectory.Download }).then((files) =>
-        setFilePaths(
-          files
-            .map((file) => file.path)
-            .filter((file) => file.includes(".jpg") || file.includes(".mp4"))
-        )
-      );
-    }
     getServerSideProps();
   }, []);
+  function getServerSideProps() {
+    api("/station/urls").then((res) =>
+      res.json().then((json) => {
+        setFilePaths(
+          json["urls"]
+            // @ts-ignore
+            .filter((url) => url.includes(".jpg") || url.includes(".mp4"))
+        );
+      })
+    );
+  }
   // console.log(filePaths);
   const cards = filePaths.map((url) => {
     const fileName = url.substring(url.lastIndexOf("/") + 1);
@@ -74,9 +74,9 @@ export default function Home() {
           {tarUrl == "" ? (
             <PlaceholderImage />
           ) : tarUrlSuffix == "jpg" ? (
-            <Image360 url={convertFileSrc(tarUrl)} />
+            <Image360 url={tarUrl} />
           ) : tarUrlSuffix == "mp4" ? (
-            <Video360 url={convertFileSrc(tarUrl)} />
+            <Video360 url={tarUrl} />
           ) : (
             <PlaceholderImage />
           )}
@@ -129,7 +129,10 @@ function SimpleFileCard({
               variant="default"
               size="md"
               onClick={() => {
-                setTar(filePath);
+                // api("/station/pathToFileURL", { path: filePath }).then((res) =>
+                //   res.json().then((json) => setTar(json["fileURL"]))
+                // );
+                setTar("/api/station/asset" + filePath);
               }}
             >
               <IconEye stroke={1.5} />
