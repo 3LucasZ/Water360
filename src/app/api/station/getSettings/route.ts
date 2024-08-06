@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getItem, init, setItem } from "node-persist";
 import { settingsDir } from "@/services/constants";
+import { homedir } from "node:os";
 
 export async function POST(request: NextRequest) {
   //get settings
@@ -19,7 +20,7 @@ export async function POST(request: NextRequest) {
   }
   var downloadsDir = await getItem("downloadsDir");
   if (downloadsDir == null) {
-    downloadsDir = "";
+    downloadsDir = homedir() + "/Water360";
     await setItem("downloadsDir", downloadsDir);
   }
   var RTMP = await getItem("RTMP");
