@@ -16,6 +16,7 @@ export async function POST(request: NextRequest) {
     v6: isIPv6(IP),
   };
   var pingable = false;
+  //@ts-ignore --override incorrect [cfg.timeout] type
   pingable = (await promise.probe(IP, cfg)).alive;
   console.log("pingable", pingable);
   //return
