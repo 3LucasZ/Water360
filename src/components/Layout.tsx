@@ -10,6 +10,9 @@ import {
   ActionIcon,
   useComputedColorScheme,
   Flex,
+  Text,
+  Stack,
+  Space,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import {
@@ -48,8 +51,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <NavLink
       key={Item.label}
       href={Item.link}
-      label={Item.label}
-      leftSection={<Item.icon stroke={1.5} />}
+      label={<Text size="lg">{Item.label}</Text>}
+      leftSection={<Item.icon />}
       variant="filled"
       active={Item.link == pathname}
     />
@@ -61,7 +64,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <AppShell
       header={{ height: 60 }}
       navbar={{
-        width: 200,
+        width: 300,
         breakpoint: "sm",
         collapsed: { mobile: !opened },
       }}
@@ -98,7 +101,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <AppShell.Navbar>
         {/* <AppShell.Section grow>{navLinks.slice(0, -1)}</AppShell.Section>
         <AppShell.Section>{navLinks.at(-1)}</AppShell.Section> */}
-        {navLinks}
+        <Space h={"md"} />
+        <Stack>{navLinks}</Stack>
       </AppShell.Navbar>
       <AppShell.Main>{children}</AppShell.Main>
     </AppShell>
