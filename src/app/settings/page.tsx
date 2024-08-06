@@ -10,7 +10,6 @@ import {
   Notification,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { downloadDir } from "@tauri-apps/api/path";
 import { isValidIP } from "@/services/mini_helper";
 import {
   IconCancel,
@@ -29,16 +28,19 @@ export default function Home() {
   const [downloadsDir, setDownloadsDir] = useState("");
   const [RTMP, setRTMP] = useState("");
 
-  const load = async () => {
-    const settings = await (await api("/station/getSettings")).json();
-    setIP(settings["IP"]);
-    setMAC(settings["MAC"]);
-    setDownloadsDir(settings["downloadsDir"] || (await downloadDir()));
-    setRTMP(settings["RTMP"]);
-  };
   useEffect(() => {
-    load();
+    getServerSideProps();
   }, []);
+  function getServerSideProps() {
+    api("/station/getSettings").then((res) =>
+      res.json().then((settings) => {
+        setIP(settings["IP"]);
+        setMAC(settings["MAC"]);
+        setDownloadsDir(settings["downloadsDir"]);
+        setRTMP(settings["RTMP"]);
+      })
+    );
+  }
 
   return (
     <>
@@ -67,7 +69,7 @@ export default function Home() {
             <Button
               size="sm"
               onClick={() => {
-                load();
+                getServerSideProps();
               }}
               color="red"
               leftSection={<IconX stroke={1.5} />}
