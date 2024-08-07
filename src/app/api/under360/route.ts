@@ -1,14 +1,9 @@
-import { settingsDir } from "@/services/constants";
 import { isValidIP } from "@/services/mini_helper";
 import { NextRequest, NextResponse } from "next/server";
-import { getItem, init } from "node-persist";
 
 export async function POST(request: NextRequest) {
   //get IP
-  await init({
-    dir: settingsDir,
-  });
-  var IP = await getItem("IP");
+  var IP = global.IP;
   if (!isValidIP(IP)) {
     return NextResponse.json({ msg: "invalid IP" }, { status: 500 });
   }

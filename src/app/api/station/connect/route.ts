@@ -1,10 +1,8 @@
-import { settingsDir } from "@/services/constants";
 import { isValidIP } from "@/services/mini_helper";
 import { Adb, AdbServerClient, AdbTransport } from "@yume-chan/adb";
 import { AdbServerNodeTcpConnector } from "@yume-chan/adb-server-node-tcp";
 import { exec } from "child_process";
 import { NextRequest, NextResponse } from "next/server";
-import { getItem, init } from "node-persist";
 import { promisify } from "util";
 import { wake } from "wake_on_lan";
 import { TextDecoderStream, WritableStream } from "@yume-chan/stream-extra";
@@ -13,19 +11,15 @@ import { under360 } from "@/services/api_helper";
 //Perform full connect sequence (can take up to 1 minute)
 //TODO: Not implemented yet unless requested.
 export async function POST(request: NextRequest) {
-  await init({
-    dir: settingsDir,
-  });
-  var IP = await getItem("IP");
+  var IP = global.IP;
   if (!isValidIP(IP)) {
     return NextResponse.json({ msg: "invalid IP" }, { status: 500 });
   }
   if (isValidIP(IP, true)) {
     IP = '"[' + IP + ']"';
   }
-  const MAC = await getItem("MAC");
   //---WOL---
-  wake(MAC, async function (error) {
+  wake(global.MAC, async function (error) {
     if (error) {
       // handle error
       return NextResponse.json({ msg: "wakeonlan failed" }, { status: 500 });

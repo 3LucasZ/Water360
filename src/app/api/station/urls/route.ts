@@ -5,18 +5,11 @@ import { WritableStream } from "@yume-chan/stream-extra";
 import fsPromises, { lstat, readdir } from "node:fs/promises";
 import fs from "fs";
 import { write } from "node:fs";
-import { getItem, init } from "node-persist";
-import { settingsDir } from "@/services/constants";
 
 export async function POST(request: NextRequest) {
-  //get data
-  await init({
-    dir: settingsDir,
-  });
-  const downloadsDir = await getItem("downloadsDir");
   //readdir
-  const urls = (await readdir(downloadsDir)).map(
-    (fileName) => downloadsDir + "/" + fileName
+  const urls = (await readdir(global.downloadsDir)).map(
+    (fileName) => global.downloadsDir + "/" + fileName
   );
   //ret
   return NextResponse.json({ urls }, { status: 500 });

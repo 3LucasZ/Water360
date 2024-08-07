@@ -31,7 +31,6 @@ import {
   IconTrash,
 } from "@tabler/icons-react";
 import { lstat } from "fs";
-import { data } from "node-persist";
 import { useEffect, useState } from "react";
 
 export default function Home() {

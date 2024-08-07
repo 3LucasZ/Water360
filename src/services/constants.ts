@@ -5,4 +5,3 @@ export const responsiveBodyWidth = {
   md: 625,
   lg: 700,
 };
-export const settingsDir = "user_settings";

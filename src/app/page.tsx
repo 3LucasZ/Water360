@@ -3,5 +3,5 @@
 import { Title } from "@mantine/core";
 
 export default function Home() {
-  return <Title>Hi</Title>;
+  return <Title>Hi there!</Title>;
 }

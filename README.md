@@ -27,6 +27,11 @@ Water360 is a desktop application available for Mac and Windows computers to con
 3. Install the adb tool on your computer.
 4. Enjoy!
 
+## Extending
+
+1. Build app from source: npm run dist
+2. Developing: npm run dev
+
 ## Debugging
 
 1. Check that the server is running.

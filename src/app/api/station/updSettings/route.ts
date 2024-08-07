@@ -1,17 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { init, setItem } from "node-persist";
-import { settingsDir } from "@/services/constants";
+import { writeFileSync } from "node:fs";
 
 export async function POST(request: NextRequest) {
-  //save settings
+  //get data
   const data = await request.json();
-  await init({
-    dir: settingsDir,
-  });
-  await setItem("IP", data["IP"]);
-  await setItem("MAC", data["MAC"]);
-  await setItem("downloadsDir", data["downloadsDir"]);
-  await setItem("RTMP", data["RTMP"]);
+  //save settings
+  writeFileSync(settingsDir + "/IP.txt", data["IP"]);
+  global.IP = data["IP"];
+  writeFileSync(settingsDir + "/MAC.txt", data["MAC"]);
+  global.MAC = data["MAC"];
+  writeFileSync(settingsDir + "/RTMP.txt", data["RTMP"]);
+  global.RTMP = data["RTMP"];
   //return
   return NextResponse.json({ msg: "ok" }, { status: 200 });
 }
