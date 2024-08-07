@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "main": "electron/main/main.js",
-  "author": "lucas.j.zheng@gmail.com",
+  "author": "3LucasZ <lucas.j.zheng@gmail.com>",
   "description": "Remote control for 360 cameras",
   "scripts": {
     "dev": "npm run dev-next & npm run start-electron",

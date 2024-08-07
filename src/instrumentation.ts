@@ -20,6 +20,9 @@ export async function register() {
     // global.settingsDir = settingsDir;
     // global.RTMP = (await getItem("RTMP")) || "Fake-RTMP-KeyT-oRep-lace";
     // console.log("global variables initialized!");
+    if (!fs.existsSync(settingsDir)) {
+      fs.mkdirSync(settingsDir, {recursive: true})
+    }
     try {
       global.IP = fs.readFileSync(settingsDir + "/IP.txt").toString();
     } catch {

@@ -36,8 +36,14 @@ Water360 is a desktop application available for Mac and Windows computers to con
 
 1. Check that the server is running.
 
-- Run: sudo lsof -nP -i6TCP | grep LISTEN | grep water
+- Run: lsof -nP -i6TCP | grep LISTEN | grep water
 - You should see: water360 ... 30011 (LISTEN)
 - This means a server at port 30011 is running
 
 2. Run inspect element on the app.
+3. Check that adb is running on port 5037.
+- Run: adb devices
+- If adb is running you should see an output
+- Run: lsof -nP -i4TCP | grep LISTEN | grep adb
+- You should see: adb ... 5037 (LISTEN) 
+- adb MUST be running on port 5037
