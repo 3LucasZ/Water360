@@ -5,6 +5,8 @@
   "main": "electron/main/main.js",
   "scripts": {
     "dist": "electron-builder",
+    "dev": "npm run dev-next && npm run start-electron",
+    "build": "npm run build-next && npm run build-electron",
     "dev-next": "next dev",
     "build-next": "next build",
     "postbuild-next": "cp -R public .next/standalone && cp -R .next/static .next/standalone/.next",
