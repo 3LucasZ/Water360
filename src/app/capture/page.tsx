@@ -13,10 +13,14 @@ import {
   Loader,
   Paper,
   Box,
+  Group,
+  ActionIcon,
+  Tooltip,
 } from "@mantine/core";
 import {
   IconBrandYoutube,
   IconCapture,
+  IconPlayerPlay,
   IconPlayerStop,
   IconVideo,
 } from "@tabler/icons-react";
@@ -29,77 +33,108 @@ import PlaceholderImage from "@/components/PlaceholderImage";
 
 export default function Home() {
   const [mode, setMode] = useState("Photo");
+
+  const [isPreviewing, setIsPreviewing] = useState(false)
   const [isCapturing, setIsCapturing] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [isLivestreaming, setIsLivestreaming] = useState(false);
 
   const [previewData, setPreviewData] = useState("");
+  const [previewStamp, setPreviewStamp] = useState(0)
   const [ws, setWs] = useState<WebSocket | undefined>(undefined);
 
   useEffect(() => {
-    init();
-  });
-  async function init() {
-    //prevent from binding ws twice
-    if (ws == undefined) {
-      var IP = (await (await api("/station/getSettings")).json())["IP"];
-      if (isValidIP(IP)) {
-        if (isValidIP(IP, true)) {
-          IP = "[" + IP + "]";
-        }
-        console.log("IP", IP);
-        const url = `ws://${IP}:8081/stream`;
-        console.log("URL", url);
-        const ws = new WebSocket(url);
-        setWs(ws);
-        ws.onmessage = async (e) => {
-          const msg = e.data;
-          // console.log(msg);
-          setPreviewData(msg);
-        };
+    getServerSideProps();
+  }, []);
+  async function getServerSideProps() {
+    var IP = (await (await api("/station/getSettings")).json())["IP"];
+    var status = (await (await under360("/status/operation")).json())
+    setIsPreviewing(status["previewStatus"] == "NORMAL")
+    setIsRecording(status["captureStatus"] == "RECORD")
+    setIsLivestreaming(status["previewStatus"] == "LIVE")
+    if (isValidIP(IP)) {
+      if (isValidIP(IP, true)) {
+        IP = "[" + IP + "]";
       }
+      console.log("IP", IP);
+      const url = `ws://${IP}:8081/stream`;
+      console.log("URL", url);
+      const ws = new WebSocket(url);
+      setWs(ws);
+      ws.onmessage = async (e) => {
+        const msg = e.data;
+        // console.log(msg);
+        setPreviewData(msg);
+        setPreviewStamp(Date.now())
+      };
     }
   }
 
-  const photoFooter = (
-    <Center>
-      <Button
-        radius={"xl"}
-        size="lg"
-        w={300}
+  const previewButton = (
+    <Tooltip label={previewStamp % 10000}>
+      <ActionIcon
         color="blue"
         onClick={async () => {
-          const res = await under360("/command/capture");
-          setIsCapturing(true);
-          setTimeout(() => {
-            setIsCapturing(false);
-          }, 4000);
+          if (isPreviewing) {
+            const res = await under360("/command/stopPreviewNormal");
+            setIsPreviewing(false)
+          } else {
+            const res = await under360("/command/startPreviewNormal");
+            if (res.status == 200) setIsPreviewing(true)
+          }
         }}
-        leftSection={!isCapturing && <IconCapture />}
+        radius={"xl"}
+        size={50}
       >
-        {isCapturing ? <Loader color="white" /> : "Capture"}
-      </Button>
+        {isPreviewing ? <IconPlayerStop /> : <IconPlayerPlay />}
+      </ActionIcon>
+    </Tooltip>)
+
+  const photoFooter = (
+    <Center>
+      <Group>
+        {previewButton}
+        <Button
+          radius={"xl"}
+          size="lg"
+          w={300}
+          color="blue"
+          onClick={async () => {
+            const res = await under360("/command/capture");
+            setIsCapturing(true);
+            setTimeout(() => {
+              setIsCapturing(false);
+            }, 4000);
+          }}
+          leftSection={!isCapturing && <IconCapture />}
+        >
+          {isCapturing ? <Loader color="white" /> : "Capture"}
+        </Button>
+      </Group>
     </Center>
   );
   const recordFooter = (
     <Center>
-      <Button
-        radius={"xl"}
-        size="lg"
-        w={300}
-        onClick={async () => {
-          if (isRecording) {
-            const res = await under360("/command/stopRecord");
-          } else {
-            const res = await under360("/command/startRecord");
-          }
-          setIsRecording(!isRecording);
-        }}
-        color={isRecording ? "red" : "blue"}
-        leftSection={isRecording ? <IconPlayerStop /> : <IconVideo />}
-      >
-        {isRecording ? "Stop" : "Record"}
-      </Button>
+      <Group>
+        {previewButton}
+        <Button
+          radius={"xl"}
+          size="lg"
+          w={300}
+          onClick={async () => {
+            if (isRecording) {
+              const res = await under360("/command/stopRecord");
+            } else {
+              const res = await under360("/command/startRecord");
+            }
+            setIsRecording(!isRecording);
+          }}
+          color={isRecording ? "red" : "blue"}
+          leftSection={isRecording ? <IconPlayerStop /> : <IconVideo />}
+        >
+          {isRecording ? "Stop" : "Record"}
+        </Button>
+      </Group>
     </Center>
   );
   const livestreamFooter = (
