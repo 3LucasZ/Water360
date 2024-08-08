@@ -12,6 +12,7 @@ const createWindow = () => {
       preload: join(__dirname, "preload.js"),
       nodeIntegration: true,
     },
+    title: "Water360"
   });
 
   mainWindow.on("ready-to-show", () => mainWindow.show());

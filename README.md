@@ -27,10 +27,21 @@ Water360 is a desktop application available for Mac and Windows computers to con
 3. Install the adb tool on your computer.
 4. Enjoy!
 
-## Extending
+## Build
 
-1. Build app from source: npm run dist
-2. Developing: npm run dev
+1. Build app from source for your platform: npm run build
+2. Build app for other platforms (TBD)
+* Check Rosetta installation: if /usr/bin/pgrep -q oahd; then echo 'rosetta installed'; fi
+* Find container PID: docker exec <id|name> ps
+
+
+## Develop 
+1. Run: npm run dev
+- This starts a NextJS server and an Electron webview in parallel
+- Provides hot reload and debugging tools
+2. Explore tooling
+- npm run -- env electron-builder --help
+- npm run -- env electron-builder --win --x64
 
 ## Debugging
 

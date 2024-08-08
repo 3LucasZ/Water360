@@ -7,14 +7,16 @@
   "description": "Remote control for 360 cameras",
   "scripts": {
     "dev": "npm run dev-next & npm run start-electron",
-    "build": "npm run build-next && npm run build-electron && electron-builder",
+    "build-mac": "npm run build-next && npm run build-electron && electron-builder -m",
+    "build-windows": "npm run build-next && npm run build-electron && electron-builder --win --x64",
     "dev-next": "next dev",
     "build-next": "next build",
     "postbuild-next": "cp -R public .next/standalone && cp -R .next/static .next/standalone/.next",
     "start-next": "next start",
     "build-electron": "tsc -p electron/src",
     "start-electron": "npm run build-electron && electron .",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
     "@electron-toolkit/utils": "^3.0.0",
@@ -69,7 +71,8 @@
     },
     "win": {
       "target": "NSIS",
-      "icon": "build/icon.ico"
+      "icon": "build/icon.ico",
+      "signAndEditExecutable": false
     },
     "files": [
       "electron/main",

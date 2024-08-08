@@ -13,6 +13,7 @@ const createWindow = () => {
             preload: (0, path_1.join)(__dirname, "preload.js"),
             nodeIntegration: true,
         },
+        title: "W"
     });
     mainWindow.on("ready-to-show", () => mainWindow.show());
     const loadURL = async () => {
