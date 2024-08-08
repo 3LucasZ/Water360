@@ -1,5 +1,6 @@
 "use client";
 
+import MemoryDisplay from "@/components/MemoryDisplay";
 import { api, under360 } from "@/services/api_helper";
 import { formatSizePair } from "@/services/mini_helper";
 import {
@@ -9,23 +10,29 @@ import {
   Text,
   Paper,
   Button,
+  Progress,
+  Box,
+  Overlay,
 } from "@mantine/core";
 import { RingProgress, SimpleGrid, Center, Group } from "@mantine/core";
-import { useEffect, useState } from "react";
+import { IconBolt } from "@tabler/icons-react";
+import { MouseEventHandler, useEffect, useState } from "react";
 
 export default function Home() {
   //station status
-  const [adbInstalled, setAdbInstalled] = useState(undefined);
+  const [adbInstalled, setAdbInstalled] = useState<boolean | undefined>(undefined);
   //khadas status
-  const [pingable, setPingable] = useState(undefined);
-  const [adbConnected, setAdbConnected] = useState(undefined);
-  const [isAppRun, setIsAppRun] = useState(undefined);
+  const [pingable, setPingable] = useState<boolean | undefined>(undefined);
+  const [adbConnected, setAdbConnected] = useState<boolean | undefined>(undefined);
+  const [isAppRun, setIsAppRun] = useState<boolean | undefined>(undefined);
   const [df, setDf] = useState({ freeSpace: 0, totalSpace: 0 });
   //cam status
   const [camStatus, setCamStatus] = useState({
     connected: undefined,
     freeSpace: 0,
     totalSpace: 0,
+    isCharging: false,
+    batteryLevel: 0
   });
   //initial data fetch
   function getServerSideProps() {
@@ -61,58 +68,40 @@ export default function Home() {
       <DeviceCard name="Ground Station">
         <Center>
           <Group>
-            <Badge
-              color={adbInstalled ? "green" : "red"}
-              hidden={adbInstalled == undefined}
-            >
-              ADB {adbInstalled ? "installed" : "not found"}
-            </Badge>
+            <StatusBadge
+              isOn={adbInstalled} onLabel="ADB installed" offLabel="ADB not found"
+            />
           </Group>
         </Center>
       </DeviceCard>
       <DeviceCard name="Khadas">
         <Center>
           <Group>
-            <Badge color={pingable ? "green" : "red"}>
-              {pingable ? "detected" : "unpingable"}
-            </Badge>
-            <Badge color={adbConnected ? "green" : "red"}>
-              {adbConnected ? "connected" : "disconnected"}
-            </Badge>
-            <Badge color={isAppRun ? "green" : "red"}>
-              {isAppRun ? "app on" : "app off"}
-            </Badge>
+            <StatusBadge isOn={pingable} onLabel="detected" offLabel="unpingable" />
+            <StatusBadge isOn={adbConnected} onLabel="connected" offLabel="disconnected" />
+            <StatusBadge isOn={isAppRun} onLabel="app on" offLabel="app off" />
           </Group>
         </Center>
         <SimpleGrid cols={2}>
           <Stack>
-            <Button
-              radius={"xl"}
+            <CommandButton
               onClick={() => {
                 api("/khadas/wol");
               }}
-              maw={300}
-            >
-              Wake
-            </Button>
-            <Button
-              radius={"xl"}
+              label="Wake"
+            />
+            <CommandButton
               onClick={() => {
                 api("/khadas/adbConnect");
               }}
-              maw={300}
-            >
-              Connect
-            </Button>
-            <Button
-              radius={"xl"}
+              label="Connect"
+            />
+            <CommandButton
               onClick={() => {
                 api("/khadas/runApp");
               }}
-              maw={300}
-            >
-              Run App
-            </Button>
+              label="Run App"
+            />
           </Stack>
           <MemoryDisplay freeSpace={df.freeSpace} totalSpace={df.totalSpace} />
         </SimpleGrid>
@@ -120,34 +109,36 @@ export default function Home() {
       <DeviceCard name="Camera">
         <Center>
           <Group>
-            <Badge
-              color={camStatus.connected ? "green" : "red"}
-              hidden={camStatus.connected == undefined}
-            >
-              {camStatus.connected ? "Connected" : "Disconnected"}
-            </Badge>
+            <StatusBadge
+              isOn={camStatus.connected}
+              onLabel="Connected"
+              offLabel="Disconnected"
+            />
+            <Box pos={"relative"}>
+              <Progress radius="xl" h="25" value={camStatus.batteryLevel * 0.9} w={100} animated={camStatus.isCharging}
+                color={camStatus.batteryLevel < 33 ? "red" : camStatus.batteryLevel < 66 ? "yellow" : "green"}
+              />
+              <Overlay backgroundOpacity={0}>
+                <Center>{camStatus.isCharging && <IconBolt color="white" />}
+                  <Text color="white" fw={600}>{camStatus.batteryLevel}%</Text>
+                </Center></Overlay>
+            </Box>
           </Group>
         </Center>
         <SimpleGrid cols={2}>
           <Stack>
-            <Button
-              radius={"xl"}
+            <CommandButton
               onClick={() => {
                 under360("/command/connect");
               }}
-              maw={300}
-            >
-              Connect
-            </Button>
-            <Button
-              radius={"xl"}
+              label="Connect"
+            />
+            <CommandButton
               onClick={() => {
                 under360("/command/disconnect");
               }}
-              maw={300}
-            >
-              Disconnect
-            </Button>
+              label="Disconnect"
+            />
           </Stack>
           <MemoryDisplay
             freeSpace={camStatus.freeSpace}
@@ -177,49 +168,23 @@ function DeviceCard({
     </Paper>
   );
 }
-function MemoryDisplay({
-  freeSpace,
-  totalSpace,
-}: {
-  freeSpace: number;
-  totalSpace: number;
-}) {
-  const usedSpace = totalSpace - freeSpace;
-  const usedPercent =
-    totalSpace > 0 ? Math.round((100 * usedSpace) / totalSpace) : 0;
-  const warningLevel = usedPercent < 33 ? 0 : usedPercent < 66 ? 1 : 2;
+function CommandButton({ label, onClick }: { label: string; onClick: MouseEventHandler<HTMLButtonElement> }) {
+  return <Button
+    radius={"xl"}
 
-  return (
-    <Group align="top">
-      <RingProgress
-        size={80}
-        roundCaps
-        thickness={8}
-        sections={[
-          {
-            value: usedPercent,
-            color:
-              warningLevel == 0 ? "blue" : warningLevel == 1 ? "yellow" : "red",
-          },
-        ]}
-      // label={
-      //   <Center>
-      //     <IconDeviceSdCard style={{ width: rem(22), height: rem(22) }} />
-      //   </Center>
-      // }
-      // visibleFrom="sm"
-      />
-      <div>
-        <Group>
-          {/* <IconDeviceSdCard style={{ width: 18, height: 18 }} /> */}
-          <Text c="dimmed" size="xs" tt="uppercase" fw={700}>
-            {"storage used"}
-          </Text>
-        </Group>
-        <Text fw={700} size="xl">
-          {totalSpace > 0 ? formatSizePair(usedSpace, totalSpace) : "0 / 0 GiB"}
-        </Text>
-      </div>
-    </Group>
-  );
+    onClick={onClick}
+    maw={300}
+  >
+    {/* <Text size="lg">{label}</Text> */}
+    {label}
+  </Button>
+}
+function StatusBadge({ isOn, onLabel, offLabel }: { isOn: boolean | undefined; onLabel: string; offLabel: string; }) {
+  return <Badge
+    color={isOn ? "green" : "red"}
+    hidden={isOn === undefined}
+    size="lg"
+  >
+    {isOn ? onLabel : offLabel}
+  </Badge>
 }
