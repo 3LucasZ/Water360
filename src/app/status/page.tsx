@@ -52,7 +52,7 @@ export default function Home() {
   useEffect(() => {
     getServerSideProps()
     // Experimental infinite data fetching
-    // const interval = setInterval(fetchData, 5000); // Infinite interval fetching
+    // const interval = setInterval(getServerSideProps, 1000); // Infinite interval fetching
     // return () => clearInterval(interval); // Cleanup on unmount
   }, []);
 
@@ -139,6 +139,15 @@ export default function Home() {
             >
               Connect
             </Button>
+            <Button
+              radius={"xl"}
+              onClick={() => {
+                under360("/command/disconnect");
+              }}
+              maw={300}
+            >
+              Disconnect
+            </Button>
           </Stack>
           <MemoryDisplay
             freeSpace={camStatus.freeSpace}
@@ -193,12 +202,12 @@ function MemoryDisplay({
               warningLevel == 0 ? "blue" : warningLevel == 1 ? "yellow" : "red",
           },
         ]}
-        // label={
-        //   <Center>
-        //     <IconDeviceSdCard style={{ width: rem(22), height: rem(22) }} />
-        //   </Center>
-        // }
-        // visibleFrom="sm"
+      // label={
+      //   <Center>
+      //     <IconDeviceSdCard style={{ width: rem(22), height: rem(22) }} />
+      //   </Center>
+      // }
+      // visibleFrom="sm"
       />
       <div>
         <Group>
