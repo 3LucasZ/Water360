@@ -1,7 +1,9 @@
 "use client";
 
-import { Title } from "@mantine/core";
+import { FeaturesCards } from "@/components/Feature/FeaturesCards";
+import { HeroText } from "@/components/Hero/HeroText";
+import { Stack, Title } from "@mantine/core";
 
 export default function Home() {
-  return <Title>Hi there!</Title>;
+  return <Stack><HeroText />< FeaturesCards /></Stack>;
 }
