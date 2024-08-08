@@ -78,6 +78,21 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             Water360
           </Title>
           <Group justify="end" flex={1}>
+            <Tooltip pb={11} label={
+              <div><Kbd>⌘</Kbd> + <Kbd>R</Kbd></div>
+            }
+            >
+              <ActionIcon
+                onClick={() => {
+                  router.refresh();
+                }}
+                variant="default"
+                size="lg"
+                aria-label="Refresh page"
+              >
+                <IconReload stroke={1.5} />
+              </ActionIcon>
+            </Tooltip>
             <ActionIcon
               onClick={() => {
                 // updBodyColor();
