@@ -1,5 +1,6 @@
 "use client";
 
+import { under360 } from "@/services/api_helper";
 import {
   NavLink,
   AppShell,
@@ -13,6 +14,12 @@ import {
   Text,
   Stack,
   Space,
+  Indicator,
+  Divider,
+  Container,
+  Box,
+  Tooltip,
+  Kbd,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import {
@@ -25,14 +32,35 @@ import {
   IconCamera,
   IconSun,
   IconMoon,
+  IconRefresh,
+  IconReload,
 } from "@tabler/icons-react";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+  //--ROUTER--
+  const router = useRouter()
+
   //--COLOR MODE--
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const computedColorScheme = useComputedColorScheme("light");
+
+  //--POLL STATE--
+  const [connected, setConnected] = useState(false)
+  function getServerSideProps() {
+    under360("/status/poll").then((res) => {
+      res.json().then((json) => {
+        setConnected(json["connected"])
+      })
+    })
+  }
+  useEffect(() => {
+    getServerSideProps()
+    // const interval = setInterval(getServerSideProps, 1000); // Infinite interval fetching
+    // return () => clearInterval(interval); // Cleanup on unmount
+  })
 
   //--NAVLINK--
   const [opened, { toggle }] = useDisclosure();
@@ -117,7 +145,20 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         {/* <AppShell.Section grow>{navLinks.slice(0, -1)}</AppShell.Section>
         <AppShell.Section>{navLinks.at(-1)}</AppShell.Section> */}
         <Space h={"md"} />
-        <Stack>{navLinks}</Stack>
+        <AppShell.Section grow><Stack>{navLinks}</Stack></AppShell.Section>
+        <Divider />
+        <AppShell.Section>
+          <NavLink
+            label={<Text size="lg">{connected ? "Connected" : "Not Connected"}</Text>}
+            // bg={connected ? "green" : "red"}
+            leftSection={
+              <Indicator inline processing
+                color={connected ? "green" : "red"} size={12} position="middle-center">
+                <Box w={21} />
+              </Indicator >
+            }
+          />
+        </AppShell.Section>
       </AppShell.Navbar>
       <AppShell.Main>{children}</AppShell.Main>
     </AppShell>
