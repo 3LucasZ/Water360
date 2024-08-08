@@ -1,33 +1,16 @@
 "use client";
 
 import { api, under360 } from "@/services/api_helper";
-import { formatSize, formatSizePair } from "@/services/mini_helper";
+import { formatSizePair } from "@/services/mini_helper";
 import {
-  Alert,
   Badge,
-  Container,
   Stack,
   Title,
   Text,
   Paper,
-  Card,
-  Progress,
   Button,
-  ActionIcon,
-  Flex,
 } from "@mantine/core";
-import { RingProgress, SimpleGrid, Center, Group, rem } from "@mantine/core";
-import {
-  IconArrowUpRight,
-  IconArrowDownRight,
-  IconSpace,
-  IconCheck,
-  IconSdk,
-  IconDeviceSdCard,
-} from "@tabler/icons-react";
-import { IconAlertCircle } from "@tabler/icons-react";
-import commandExists from "command-exists";
-import { warn } from "console";
+import { RingProgress, SimpleGrid, Center, Group } from "@mantine/core";
 import { useEffect, useState } from "react";
 
 export default function Home() {
@@ -45,7 +28,7 @@ export default function Home() {
     totalSpace: 0,
   });
   //initial data fetch
-  useEffect(() => {
+  function getServerSideProps() {
     //station status
     api("/station/adbInstalled").then((res) =>
       res.json().then((json) => setAdbInstalled(json["adbInstalled"]))
@@ -65,6 +48,9 @@ export default function Home() {
     under360("/status").then((res) =>
       res.json().then((json) => setCamStatus(json))
     );
+  }
+  useEffect(() => {
+    getServerSideProps()
     // Experimental infinite data fetching
     // const interval = setInterval(fetchData, 5000); // Infinite interval fetching
     // return () => clearInterval(interval); // Cleanup on unmount
