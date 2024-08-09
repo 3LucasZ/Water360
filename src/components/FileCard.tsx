@@ -138,12 +138,13 @@ export default function FileCard({
                         Math.round(json["exportProgress"] * 100)
                       );
                       setExporting(json["exporting"]);
-                      if (exporting) {
+                      if (json["exporting"]) {
                         checker();
                       }
                     })
                   );
                 }
+                checker();
               }}
             >
               Export
