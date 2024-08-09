@@ -12,6 +12,9 @@ import {
   Text,
   Skeleton,
   Group,
+  Progress,
+  Overlay,
+  Center,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconFileInfo, IconDownload, IconTrash } from "@tabler/icons-react";
@@ -32,6 +35,10 @@ export default function FileCard({
   fileType: number;
   date: string;
 }) {
+  //exporting
+  const [exporting, setExporting] = useState(false);
+  const [exportProgress, setExportProgress] = useState(0);
+  //data
   const [opened, { open, close }] = useDisclosure(false);
   const [data, setData] = useState({
     height: 0,
@@ -50,6 +57,16 @@ export default function FileCard({
   const [isDeleting, setIsDeleting] = useState(false);
   return (
     <Box pos="relative">
+      <Overlay hidden={!exporting}>
+        <Center h="100%">
+          <Stack w={"80%"}>
+            <Center>
+              <Text>{exportProgress}%</Text>
+            </Center>
+            <Progress h={20} radius={"xl"} value={exportProgress} />
+          </Stack>
+        </Center>
+      </Overlay>
       <LoadingOverlay
         visible={isDeleting}
         zIndex={1000}
@@ -105,7 +122,28 @@ export default function FileCard({
               fullWidth
               leftSection={<IconDownload stroke={1.5} />}
               onClick={() => {
-                api("/khadas/pull", { url: filePath });
+                if (onCamera) {
+                  under360("/export", { url: filePath });
+                } else {
+                  api("/khadas/export", { url: filePath });
+                }
+                setExporting(true);
+                function checker() {
+                  (onCamera
+                    ? under360("/export/status")
+                    : api("/khadas/export/status")
+                  ).then((res) =>
+                    res.json().then((json) => {
+                      setExportProgress(
+                        Math.round(json["exportProgress"] * 100)
+                      );
+                      setExporting(json["exporting"]);
+                      if (exporting) {
+                        checker();
+                      }
+                    })
+                  );
+                }
               }}
             >
               Export
@@ -116,7 +154,9 @@ export default function FileCard({
               miw="40"
               px="0"
               onClick={async () => {
-                await under360("/rm", { url: filePath });
+                if (onCamera) {
+                  await under360("/rm", { url: filePath });
+                }
                 setIsDeleting(true);
                 setTimeout(() => {
                   setIsDeleting(false);
