@@ -53,7 +53,11 @@ export default function Home() {
   }, []);
   const cards = cameraUrls
     .concat(khadasUrls)
-    .sort((a, b) => -a.split("_")[1].localeCompare(b.split("_")[1]))
+    .sort((a, b) => {
+      var aa = a.substring(a.lastIndexOf("/") + 1);
+      var bb = b.substring(b.lastIndexOf("/") + 1);
+      return -aa.localeCompare(bb);
+    })
     .filter(
       (url) =>
         url.toLowerCase().match(search.toLowerCase()) && !url.match("LRV")
@@ -88,7 +92,8 @@ export default function Home() {
       return (
         <FileCard
           key={url}
-          filePath={
+          filePath={url}
+          srcFilePath={
             onCamera
               ? url
               : cameraUrls.filter((cameraUrl) => {

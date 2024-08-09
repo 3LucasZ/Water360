@@ -24,6 +24,7 @@ export default function FileCard({
   onCamera,
   refresh,
   filePath,
+  srcFilePath,
   fileName,
   fileType,
   date,
@@ -31,6 +32,7 @@ export default function FileCard({
   onCamera: boolean;
   refresh: Function;
   filePath: string;
+  srcFilePath: string;
   fileName: string;
   fileType: number;
   date: string;
@@ -50,7 +52,7 @@ export default function FileCard({
     creationTime: 0,
   });
   useEffect(() => {
-    under360("/inspect", { url: filePath }).then((res) =>
+    under360("/inspect", { url: srcFilePath }).then((res) =>
       res.json().then((json) => setData(json))
     );
   }, []);
@@ -124,13 +126,16 @@ export default function FileCard({
               variant="light"
               fullWidth
               leftSection={<IconDownload stroke={1.5} />}
-              onClick={() => {
+              onClick={async () => {
                 if (onCamera) {
-                  under360("/export" + (fileType == 1 ? "/image" : "/video"), {
-                    url: filePath,
-                  });
+                  await under360(
+                    "/export" + (fileType == 1 ? "/image" : "/video"),
+                    {
+                      url: filePath,
+                    }
+                  );
                 } else {
-                  api("/khadas/export", { url: filePath });
+                  await api("/khadas/export", { url: filePath });
                 }
                 setExporting(true);
                 function checker() {
