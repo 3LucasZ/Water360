@@ -21,18 +21,16 @@ export async function POST(request: NextRequest) {
     const transport: AdbTransport = await client.createTransport(selector);
     const adb: Adb = new Adb(transport);
     const sync: AdbSync = await adb.sync();
-    //pull file asynchronously
-    console.log("pull:");
-    const content = sync.read(filePath);
-    let fileExists = await fsPromises
-      .access(fileName)
-      .then(() => true)
-      .catch(() => false);
-    console.log("fileExists", fileExists);
-    var writeStream = fs.createWriteStream(fileName, { flags: "w" });
+    //export setup
+    var writeStream = fs.createWriteStream(
+      global.downloadsDir + "/" + fileName,
+      { flags: "w" }
+    );
     global.exporting = true;
     global.exportSoFar = 0;
     global.exportTotal = Number((await sync.lstat(filePath)).size);
+    //pull file asynchronously
+    const content = sync.read(filePath);
     content
       .pipeTo(
         new WritableStream({
