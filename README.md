@@ -58,3 +58,10 @@ Water360 is a desktop application available for Mac and Windows computers to con
 - Run: lsof -nP -i4TCP | grep LISTEN | grep adb
 - You should see: adb ... 5037 (LISTEN) 
 - adb MUST be running on port 5037
+
+## Error codes
+- 200: All good!
+- 500: Internal server error (generic)
+  - Notification pop-ups
+- 504: Gateway Timeout (server acting as a proxy to Khadas did not receive a timely response)
+  - No notification pop-ups
