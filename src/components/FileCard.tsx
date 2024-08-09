@@ -112,6 +112,9 @@ export default function FileCard({
               disabled={data.creationTime == 0}
               onClick={async () => {
                 open();
+                under360("/inspect", { url: filePath }).then((res) =>
+                  res.json().then((json) => setData(json))
+                );
               }}
             >
               <IconFileInfo stroke={1.5} />
@@ -123,7 +126,9 @@ export default function FileCard({
               leftSection={<IconDownload stroke={1.5} />}
               onClick={() => {
                 if (onCamera) {
-                  under360("/export", { url: filePath });
+                  under360("/export" + (fileType == 1 ? "/image" : "/video"), {
+                    url: filePath,
+                  });
                 } else {
                   api("/khadas/export", { url: filePath });
                 }
@@ -156,13 +161,15 @@ export default function FileCard({
               px="0"
               onClick={async () => {
                 if (onCamera) {
-                  await under360("/rm", { url: filePath });
+                  under360("/rm", { url: filePath });
+                } else {
+                  api("/khadas/rm", { url: filePath });
                 }
                 setIsDeleting(true);
                 setTimeout(() => {
                   setIsDeleting(false);
                   refresh();
-                }, 5000);
+                }, 1000);
               }}
             >
               <IconTrash stroke={1.5} />

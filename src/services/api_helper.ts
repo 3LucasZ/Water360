@@ -1,10 +1,9 @@
 import { notifications } from "@mantine/notifications";
 import { NextResponse } from "next/server";
 
-export async function under360(route: string, params?: Record<string, string>) {
-  const newRoute =
-    "/under360" + route + "?" + new URLSearchParams(params).toString();
-  return await api(newRoute);
+export async function under360(route: string, body?: any) {
+  const newRoute = "/under360" + route;
+  return await api(newRoute, body);
 }
 export async function api(route: string, body?: any) {
   const res = await fetch("/api" + route, {
@@ -12,11 +11,8 @@ export async function api(route: string, body?: any) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  console.log(route);
-  console.log(body);
-  //extract json to send notification
+  //extract json in order to send notification if necessary
   const resJson = await res.json();
-  console.log(resJson);
   if (res.status != 200 && res.status != 504) {
     notifications.show({
       title: "Error",

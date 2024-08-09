@@ -53,6 +53,7 @@ export default function Home() {
   }, []);
   const cards = cameraUrls
     .concat(khadasUrls)
+    .sort((a, b) => -a.split("_")[1].localeCompare(b.split("_")[1]))
     .filter(
       (url) =>
         url.toLowerCase().match(search.toLowerCase()) && !url.match("LRV")
@@ -79,19 +80,25 @@ export default function Home() {
         const hr = Number(timeStr.substring(0, 2));
         const min = Number(timeStr.substring(2, 4));
         const sec = Number(timeStr.substring(4, 6));
-        date = (new Date(Date.UTC(yr, m, d, hr, min, sec))).toLocaleDateString();
+        date = new Date(Date.UTC(yr, m, d, hr, min, sec)).toLocaleString();
       } catch (e) {
         //in the case that the filename glitches and doesn't have the prescribed format
-        date = "N/A"
+        date = "N/A";
       }
       return (
         <FileCard
           key={url}
-          filePath={url}
+          filePath={
+            onCamera
+              ? url
+              : cameraUrls.filter((cameraUrl) => {
+                  return cameraUrl.includes(fileName.split(".")[0]);
+                })[0]
+          }
           fileName={fileName}
           onCamera={onCamera}
           fileType={fileType}
-          date={date.toLocaleString()}
+          date={date}
           refresh={getServerSideProps}
         />
       );
