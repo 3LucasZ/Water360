@@ -69,7 +69,7 @@ export default function Home() {
           : filePrefix == "LRV"
           ? 3
           : 2;
-      var date = new Date();
+      var date;
       try {
         const dateStr = url.split("_")[1];
         const yr = Number(dateStr.substring(0, 4));
@@ -79,9 +79,10 @@ export default function Home() {
         const hr = Number(timeStr.substring(0, 2));
         const min = Number(timeStr.substring(2, 4));
         const sec = Number(timeStr.substring(4, 6));
-        date = new Date(Date.UTC(yr, m, d, hr, min, sec));
+        date = (new Date(Date.UTC(yr, m, d, hr, min, sec))).toLocaleDateString();
       } catch (e) {
-        //in the case that the filename glitches and doesn't have the prescribed format...
+        //in the case that the filename glitches and doesn't have the prescribed format
+        date = "N/A"
       }
       return (
         <FileCard
@@ -107,7 +108,7 @@ export default function Home() {
             setSearch(event.target.value);
           }}
         />
-        {cameraUrlsLoading && (
+        {cameraUrlsLoading && khadasUrlsLoading && (
           <Center h="300" mah={"50vh"}>
             <Loader size={"xl"} type="bars" color="pink" />
           </Center>
