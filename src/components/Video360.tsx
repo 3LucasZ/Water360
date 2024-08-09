@@ -7,6 +7,7 @@ import { Suspense, useEffect, useState } from "react";
 import {
   ActionIcon,
   AspectRatio,
+  Box,
   Container,
   Group,
   Slider,
@@ -39,28 +40,33 @@ export default function Video360(props: Props) {
       <video height={0} width={0} ref={(newRef) => setRef(newRef!)}>
         <source src={props.url} type="video/mp4" />
       </video>
+      <Box
+        style={(theme) => ({
+          borderRadius: theme.radius.lg,
+          overflow: "hidden",
+        })}
+      >
+        <AspectRatio ratio={1080 / 720}>
+          <Canvas camera={{ position: [0, 0, 0.1] }}>
+            <OrbitControls
+              enableZoom={false}
+              enablePan={false}
+              enableDamping
+              dampingFactor={0.2}
+            />
 
-      <AspectRatio ratio={1080 / 720}>
-        <Canvas camera={{ position: [0, 0, 0.1] }}>
-          <OrbitControls
-            enableZoom={false}
-            enablePan={false}
-            enableDamping
-            dampingFactor={0.2}
-          />
-
-          <mesh>
-            <sphereGeometry attach="geometry" args={[500, 60, 40]} />
-            <meshBasicMaterial side={BackSide}>
-              <videoTexture
-                attach={"map"}
-                args={videoRef ? [videoRef] : undefined}
-              />
-            </meshBasicMaterial>
-          </mesh>
-        </Canvas>
-      </AspectRatio>
-
+            <mesh>
+              <sphereGeometry attach="geometry" args={[500, 60, 40]} />
+              <meshBasicMaterial side={BackSide}>
+                <videoTexture
+                  attach={"map"}
+                  args={videoRef ? [videoRef] : undefined}
+                />
+              </meshBasicMaterial>
+            </mesh>
+          </Canvas>
+        </AspectRatio>
+      </Box>
       <Slider
         label={null}
         w="100%"

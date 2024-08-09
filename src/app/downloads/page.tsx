@@ -41,10 +41,10 @@ export default function Home() {
     getServerSideProps();
   }, []);
   function getServerSideProps() {
-    api("/station/urls").then((res) =>
+    api("/station/ls").then((res) =>
       res.json().then((json) => {
         setFilePaths(
-          json["urls"]
+          json["filePaths"]
             // @ts-ignore
             .filter((url) => url.includes(".jpg") || url.includes(".mp4"))
         );
@@ -101,7 +101,7 @@ function SimpleFileCard({
 }) {
   const [fileSize, setFileSize] = useState(0);
   function getServerSideProps() {
-    api("/station/lstat", { url: filePath }).then((res) =>
+    api("/station/inspect", { url: filePath }).then((res) =>
       res.json().then((json) => setFileSize(json["fileSize"]))
     );
   }

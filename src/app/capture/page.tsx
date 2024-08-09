@@ -34,13 +34,13 @@ import PlaceholderImage from "@/components/PlaceholderImage";
 export default function Home() {
   const [mode, setMode] = useState("Photo");
 
-  const [isPreviewing, setIsPreviewing] = useState(false)
+  const [isPreviewing, setIsPreviewing] = useState(false);
   const [isCapturing, setIsCapturing] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [isLivestreaming, setIsLivestreaming] = useState(false);
 
   const [previewData, setPreviewData] = useState("");
-  const [previewStamp, setPreviewStamp] = useState(0)
+  const [previewStamp, setPreviewStamp] = useState(0);
   const [ws, setWs] = useState<WebSocket | undefined>(undefined);
 
   useEffect(() => {
@@ -48,10 +48,10 @@ export default function Home() {
   }, []);
   async function getServerSideProps() {
     var IP = (await (await api("/station/getSettings")).json())["IP"];
-    var status = (await (await under360("/status/operation")).json())
-    setIsPreviewing(status["previewStatus"] == "NORMAL")
-    setIsRecording(status["captureStatus"] == "RECORD")
-    setIsLivestreaming(status["previewStatus"] == "LIVE")
+    var status = await (await under360("/status/operation")).json();
+    setIsPreviewing(status["previewStatus"] == "NORMAL");
+    setIsRecording(status["captureStatus"] == "RECORD");
+    setIsLivestreaming(status["previewStatus"] == "LIVE");
     if (isValidIP(IP)) {
       if (isValidIP(IP, true)) {
         IP = "[" + IP + "]";
@@ -65,7 +65,7 @@ export default function Home() {
         const msg = e.data;
         // console.log(msg);
         setPreviewData(msg);
-        setPreviewStamp(Date.now())
+        setPreviewStamp(Date.now());
       };
     }
   }
@@ -77,10 +77,10 @@ export default function Home() {
         onClick={async () => {
           if (isPreviewing) {
             const res = await under360("/command/stopPreviewNormal");
-            setIsPreviewing(false)
+            setIsPreviewing(false);
           } else {
             const res = await under360("/command/startPreviewNormal");
-            if (res.status == 200) setIsPreviewing(true)
+            if (res.status == 200) setIsPreviewing(true);
           }
         }}
         radius={"xl"}
@@ -88,7 +88,8 @@ export default function Home() {
       >
         {isPreviewing ? <IconPlayerStop /> : <IconPlayerPlay />}
       </ActionIcon>
-    </Tooltip>)
+    </Tooltip>
+  );
 
   const photoFooter = (
     <Center>
@@ -194,18 +195,11 @@ export default function Home() {
             };
           })}
         />
-        <Box
-          style={(theme) => ({
-            borderRadius: theme.radius.lg,
-            overflow: "hidden",
-          })}
-        >
-          {previewData.length > 1 ? (
-            <Image360 url={"data:image/png;base64," + previewData} />
-          ) : (
-            <PlaceholderImage />
-          )}
-        </Box>
+        {previewData.length > 1 ? (
+          <Image360 url={"data:image/png;base64," + previewData} />
+        ) : (
+          <PlaceholderImage />
+        )}
         {footer}
       </Stack>
     </Center>
