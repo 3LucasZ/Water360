@@ -6,7 +6,14 @@ export async function POST(
   { params }: { params: { slug: string[] } }
 ) {
   //get proxy route
-  const proxyRoute = "/" + params.slug.join("/");
+  var proxyRoute = "/" + params.slug.join("/");
+  //convert body to params
+  try {
+    const queryParamsRaw = await request.json();
+    if (queryParamsRaw) {
+      proxyRoute += "?" + new URLSearchParams(queryParamsRaw).toString();
+    }
+  } catch (e) {}
   //get IP
   var IP = global.IP;
   if (!isValidIP(IP)) {
