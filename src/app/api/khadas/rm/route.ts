@@ -3,6 +3,10 @@ import { AdbServerNodeTcpConnector } from "@yume-chan/adb-server-node-tcp";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
+  //get data
+  const fileName = (await request.json())["url"];
+  const filePath = "/storage/emulated/0/Pictures/SDK_DEMO_EXPORT/" + fileName;
+  //setup adb
   const connector: AdbServerNodeTcpConnector = new AdbServerNodeTcpConnector({
     host: "localhost",
     port: 5037,
@@ -11,9 +15,7 @@ export async function POST(request: NextRequest) {
   const selector: AdbServerClient.DeviceSelector = undefined;
   const transport: AdbTransport = await client.createTransport(selector);
   const adb: Adb = new Adb(transport);
-
-  const sync: AdbSync = await adb.sync();
-  await adb.rm("");
-
+  // remove file
+  await adb.rm(filePath);
   return NextResponse.json({ message: "ok" }, { status: 200 });
 }

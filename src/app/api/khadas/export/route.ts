@@ -41,6 +41,11 @@ export async function POST(request: NextRequest) {
           },
         })
       )
+      .catch(() => {
+        //clean up on error
+        writeStream.close();
+        global.exporting = false;
+      })
       .finally(() => {
         //clean up on end
         writeStream.close();
