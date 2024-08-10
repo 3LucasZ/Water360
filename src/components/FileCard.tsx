@@ -24,7 +24,6 @@ export default function FileCard({
   onCamera,
   refresh,
   filePath,
-  srcFilePath,
   fileName,
   fileType,
   date,
@@ -32,7 +31,6 @@ export default function FileCard({
   onCamera: boolean;
   refresh: Function;
   filePath: string;
-  srcFilePath: string;
   fileName: string;
   fileType: number;
   date: string;
@@ -52,7 +50,7 @@ export default function FileCard({
     creationTime: 0,
   });
   useEffect(() => {
-    under360("/inspect", { url: srcFilePath }).then((res) =>
+    under360("/inspect", { url: filePath }).then((res) =>
       res.json().then((json) => setData(json))
     );
   }, []);

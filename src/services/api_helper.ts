@@ -3,12 +3,13 @@ import { NextResponse } from "next/server";
 
 export async function under360(route: string, body?: any) {
   const newRoute = "/under360" + route;
-  return await api(newRoute, body);
+  return await api(newRoute, body, route.includes("inspect"));
 }
-export async function api(route: string, body?: any) {
+export async function api(route: string, body?: any, forceCache?: boolean) {
   const res = await fetch("/api" + route, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
+    cache: forceCache ? "force-cache" : "default",
     body: JSON.stringify(body),
   });
   //extract json in order to send notification if necessary

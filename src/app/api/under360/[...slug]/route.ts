@@ -28,7 +28,7 @@ export async function POST(
   const call = protocol + "://" + IP + ":" + port + proxyRoute;
   console.log("under360:", call);
   //apply forceCache on certain commands
-  const forceCache = proxyRoute.match("inspect");
+  const forceCache = proxyRoute.includes("inspect");
   //perform proxy request
   try {
     const res = await fetch(call, {

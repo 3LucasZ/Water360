@@ -2,6 +2,12 @@
 
 import FileCard from "@/components/FileCard";
 import { api, under360 } from "@/services/api_helper";
+import {
+  getFileName,
+  getFilePrefix,
+  getFileStamp,
+  getFileSuffix,
+} from "@/services/file_helper";
 import { SimpleGrid, Stack, TextInput, Center, Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconSearch } from "@tabler/icons-react";
@@ -63,17 +69,13 @@ export default function Home() {
         url.toLowerCase().match(search.toLowerCase()) && !url.match("LRV")
     )
     .map((url) => {
-      console.log(url);
-      const fileName = url.substring(url.lastIndexOf("/") + 1);
-      const onCamera = url.includes("http");
-      const filePrefix = fileName.substring(0, 3);
-      const fileSuffix = url.split(".").pop();
       const fileType =
-        fileSuffix == "insp" || fileSuffix == "jpg"
+        getFileSuffix(url) == "insp" || getFileSuffix(url) == "jpg"
           ? 1
-          : filePrefix == "LRV"
+          : getFilePrefix(url) == "LRV"
           ? 3
           : 2;
+      const onCamera = url.includes("http");
       var date;
       try {
         const dateStr = url.split("_")[1];
@@ -93,14 +95,7 @@ export default function Home() {
         <FileCard
           key={url}
           filePath={url}
-          srcFilePath={
-            onCamera
-              ? url
-              : cameraUrls.filter((cameraUrl) => {
-                  return cameraUrl.includes(fileName.split(".")[0]);
-                })[0]
-          }
-          fileName={fileName}
+          fileName={getFileName(url)}
           onCamera={onCamera}
           fileType={fileType}
           date={date}
