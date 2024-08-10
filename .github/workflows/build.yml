@@ -1,31 +1,26 @@
-# name: Build/release
-
-# on: push
-
-# jobs:
-#   release:
-#     runs-on: ${{ matrix.os }}
-
-#     strategy:
-#       matrix:
-#         os: [macos-latest, windows-latest]
-
-#     steps:
-#       - name: Check out Git repository
-#         uses: actions/checkout@v1
-
-#       - name: Install Node.js, NPM and Yarn
-#         uses: actions/setup-node@v1
-#         with:
-#           node-version: 20
-
-#       - name: Build/release Electron app
-#         uses: Yan-Jobs/action-electron-builder@v1.7.0
-#         with:
-#           # GitHub token, automatically provided to the action
-#           # (No need to define this secret in the repo settings)
-#           github_token: ${{ secrets.github_token }}
-
-#           # If the commit is tagged with a version (e.g. "v1.0.0"),
-#           # release the app after building
-#           release: ${{ startsWith(github.ref, 'refs/tags/v') }}
+name: build
+# run on pushes to main w/ tag v**
+on:
+  push:
+    tags:
+      - v**
+    branches:
+      - main
+# parallel mac (TBD) and windows builder
+jobs:
+  # run windows VM
+  build_on_win:
+    runs-on: windows-latest
+    steps:
+      # checkout main branch
+      - uses: actions/checkout@master
+      # install node v20
+      - uses: actions/setup-node@master
+        with:
+          node-version: 20
+      # install node modules
+      - run: npm install
+      # build
+      - run: npm run build-windows
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
