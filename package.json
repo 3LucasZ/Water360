@@ -9,6 +9,7 @@
     "dev": "npm run dev-next & npm run start-electron",
     "build-mac": "npm run build-next && npm run build-electron && electron-builder -m",
     "build-windows": "npm run build-next && npm run build-electron && electron-builder -w --x64",
+    "release-windows": "npm run build-next && npm run build-electron && electron-builder -w --x64 --publish always",
     "dev-next": "next dev",
     "build-next": "next build",
     "postbuild-next": "cp -R public .next/standalone && cp -R .next/static .next/standalone/.next",
@@ -60,7 +61,11 @@
   },
   "build": {
     "appId": "com.questinstitute.water360",
-    "publish": ["github"],
+    "publish": [
+      {
+        "provider": "github"
+      }
+    ],
     "dmg": {
       "title": "${productName} ${version}"
     },
@@ -73,7 +78,10 @@
     "win": {
       "target": "NSIS",
       "icon": "build/icon.ico",
-      "signAndEditExecutable": false
+      "signAndEditExecutable": false,
+      "publish": [
+        "github"
+      ]
     },
     "files": [
       "electron/main",

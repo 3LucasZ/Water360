@@ -1,11 +1,9 @@
 name: build
-# run on pushes to main w/ tag v**
+# run on pushes w/ tag v**
 on:
   push:
     tags:
       - v**
-    branches:
-      - main
 # parallel mac (TBD) and windows builder
 jobs:
   # run windows VM
@@ -21,6 +19,6 @@ jobs:
       # install node modules
       - run: npm install
       # build
-      - run: npm run build-windows
+      - run: npm run release-windows
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
