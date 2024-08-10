@@ -1,4 +1,4 @@
-<p align="center">
+<p align="center"> 
   <img src="public/logo.png" height="128">
   <h1 align="center">Water360</h1>
   <div align="center">
@@ -31,15 +31,19 @@ Water360 is a desktop application available for Mac and Windows computers to con
 
 1. Build app from source for your platform: npm run build
 2. Build app for other platforms (TBD)
-* Check Rosetta installation: if /usr/bin/pgrep -q oahd; then echo 'rosetta installed'; fi
-* Find container PID: docker exec <id|name> ps
 
+- Check Rosetta installation: if /usr/bin/pgrep -q oahd; then echo 'rosetta installed'; fi
+- Find container PID: docker exec <id|name> ps
 
-## Develop 
+## Develop
+
 1. Run: npm run dev
+
 - This starts a NextJS server and an Electron webview in parallel
 - Provides hot reload and debugging tools
+
 2. Explore tooling
+
 - npm run -- env electron-builder --help
 - npm run -- env electron-builder --win --x64
 
@@ -53,13 +57,15 @@ Water360 is a desktop application available for Mac and Windows computers to con
 
 2. Run inspect element on the app.
 3. Check that adb is running on port 5037.
+
 - Run: adb devices
 - If adb is running you should see an output
 - Run: lsof -nP -i4TCP | grep LISTEN | grep adb
-- You should see: adb ... 5037 (LISTEN) 
+- You should see: adb ... 5037 (LISTEN)
 - adb MUST be running on port 5037
 
 ## Error codes
+
 - 200: All good!
 - 500: Internal server error (generic)
   - Notification pop-ups
