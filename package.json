@@ -1,6 +1,6 @@
 {
   "name": "water360",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "private": true,
   "main": "electron/main/main.js",
   "author": "3LucasZ <lucas.j.zheng@gmail.com>",
@@ -17,8 +17,7 @@
     "start-next": "next start",
     "build-electron": "tsc -p electron/src",
     "start-electron": "npm run build-electron && electron .",
-    "lint": "next lint",
-    "postinstall": "electron-builder install-app-deps"
+    "lint": "next lint"
   },
   "dependencies": {
     "@electron-toolkit/utils": "^3.0.0",

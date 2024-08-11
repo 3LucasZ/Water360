@@ -64,6 +64,11 @@ Water360 is a desktop application available for Mac and Windows computers to con
 - You should see: adb ... 5037 (LISTEN)
 - adb MUST be running on port 5037
 
+4. Directories
+
+- /Applications
+- /Users/lucaszheng/Library/Application Support/water360
+
 ## Error codes
 
 - 200: All good!

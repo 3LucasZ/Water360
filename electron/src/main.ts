@@ -21,29 +21,29 @@ const createWindow = () => {
     mainWindow.show();
     // mainWindow.webContents.openDevTools();
 
-    console.log("initializing global variables...");
+    // console.log("initializing global variables...");
 
-    const appDir = homedir() + "/Water360";
-    const settingsDir = appDir + "/user_settings";
+    // const appDir = homedir() + "/Water360";
+    // const settingsDir = appDir + "/user_settings";
 
-    if (!existsSync(settingsDir)) {
-      mkdirSync(settingsDir, { recursive: true });
-    }
-    try {
-      readFileSync(settingsDir + "/IP.txt").toString();
-    } catch {
-      writeFileSync(settingsDir + "/IP.txt", "0.0.0.0");
-    }
-    try {
-      readFileSync(settingsDir + "/MAC.txt").toString();
-    } catch {
-      writeFileSync(settingsDir + "/MAC.txt", "c8:63:14:74:1f:96");
-    }
-    try {
-      readFileSync(settingsDir + "/RTMP.txt").toString();
-    } catch {
-      writeFileSync(settingsDir + "/RTMP.txt", "Fake-RTMP-KeyT-oRep-lace");
-    }
+    // if (!existsSync(settingsDir)) {
+    //   mkdirSync(settingsDir, { recursive: true });
+    // }
+    // try {
+    //   readFileSync(settingsDir + "/IP.txt").toString();
+    // } catch {
+    //   writeFileSync(settingsDir + "/IP.txt", "0.0.0.0");
+    // }
+    // try {
+    //   readFileSync(settingsDir + "/MAC.txt").toString();
+    // } catch {
+    //   writeFileSync(settingsDir + "/MAC.txt", "c8:63:14:74:1f:96");
+    // }
+    // try {
+    //   readFileSync(settingsDir + "/RTMP.txt").toString();
+    // } catch {
+    //   writeFileSync(settingsDir + "/RTMP.txt", "Fake-RTMP-KeyT-oRep-lace");
+    // }
   });
 
   const loadURL = async () => {
