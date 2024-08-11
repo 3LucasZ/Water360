@@ -7,6 +7,22 @@ on:
 # parallel mac (TBD) and windows builder
 jobs:
   # run windows VM
+  build_on_mac:
+    runs-on: macos-latest
+    steps:
+      # checkout main branch
+      - uses: actions/checkout@master
+      # install node v20
+      - uses: actions/setup-node@master
+        with:
+          node-version: 20
+      # install node modules
+      - run: npm install
+      # build
+      - run: npm run release-macos
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  # run windows VM
   build_on_win:
     runs-on: windows-latest
     steps:

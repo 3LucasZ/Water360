@@ -1,6 +1,6 @@
 {
   "name": "water360",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "main": "electron/main/main.js",
   "author": "3LucasZ <lucas.j.zheng@gmail.com>",
@@ -67,7 +67,10 @@
       }
     ],
     "dmg": {
-      "title": "${productName} ${version}"
+      "title": "${productName} ${version}",
+      "publish": [
+        "github"
+      ]
     },
     "linux": {
       "target": [
