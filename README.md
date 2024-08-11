@@ -69,6 +69,10 @@ Water360 is a desktop application available for Mac and Windows computers to con
 - /Applications
 - /Users/lucaszheng/Library/Application Support/water360
 
+5. Try catch
+
+- Since there is no console.log on main process, wrap everything with try catch, and return it w/ the error code.
+
 ## Error codes
 
 - 200: All good!

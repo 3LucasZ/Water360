@@ -1,6 +1,6 @@
 "use client";
 
-import { under360 } from "@/services/api_helper";
+import { api, under360 } from "@/services/api_helper";
 import {
   NavLink,
   AppShell,
@@ -50,9 +50,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   //--POLL STATE--
   const [connected, setConnected] = useState(false);
   function getServerSideProps() {
-    under360("/status/poll").then((res) => {
-      res.json().then((json) => {
-        setConnected(json["connected"]);
+    api("/station/initSettings").then((res) => {
+      under360("/status/poll").then((res) => {
+        res.json().then((json) => {
+          setConnected(json["connected"]);
+        });
       });
     });
   }

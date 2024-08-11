@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     } else {
-      return NextResponse.json({ err: "RATS!" }, { status: 500 });
+      return NextResponse.json({ err: "Unkown error!" }, { status: 500 });
     }
   }
   //return
