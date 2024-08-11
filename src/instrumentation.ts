@@ -1,3 +1,5 @@
+import { app } from "electron";
+
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
     const os = await import("node:os");
@@ -5,7 +7,8 @@ export async function register() {
 
     console.log("initializing global variables...");
 
-    const appDir = os.homedir() + "/Water360";
+    // const appDir = os.homedir() + "/Water360";
+    const appDir = app.getPath("appData");
     const downloadsDir = appDir;
     const settingsDir = appDir + "/user_settings";
 
