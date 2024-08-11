@@ -2,6 +2,7 @@ import { is } from "@electron-toolkit/utils";
 import { app, BrowserWindow, ipcMain } from "electron";
 import { getPort } from "get-port-please";
 import { startServer } from "next/dist/server/lib/start-server";
+import { existsSync } from "node:fs";
 import { join } from "path";
 
 const createWindow = () => {
@@ -12,10 +13,39 @@ const createWindow = () => {
       preload: join(__dirname, "preload.js"),
       nodeIntegration: true,
     },
-    title: "Water360"
+    title: "Water360",
   });
 
-  mainWindow.on("ready-to-show", () => mainWindow.show());
+  mainWindow.on("ready-to-show", async () => {
+    mainWindow.show();
+    // mainWindow.webContents.openDevTools();
+    const os = await import("node:os");
+    const fs = await import("node:fs");
+
+    console.log("initializing global variables...");
+
+    const appDir = os.homedir() + "/Water360";
+    const settingsDir = appDir + "/user_settings";
+
+    if (!existsSync(settingsDir)) {
+      fs.mkdirSync(settingsDir, { recursive: true });
+    }
+    try {
+      fs.readFileSync(settingsDir + "/IP.txt").toString();
+    } catch {
+      fs.writeFileSync(settingsDir + "/IP.txt", "0.0.0.0");
+    }
+    try {
+      fs.readFileSync(settingsDir + "/MAC.txt").toString();
+    } catch {
+      fs.writeFileSync(settingsDir + "/MAC.txt", "c8:63:14:74:1f:96");
+    }
+    try {
+      fs.readFileSync(settingsDir + "/RTMP.txt").toString();
+    } catch {
+      fs.writeFileSync(settingsDir + "/RTMP.txt", "Fake-RTMP-KeyT-oRep-lace");
+    }
+  });
 
   const loadURL = async () => {
     if (is.dev) {
