@@ -13,7 +13,14 @@ export async function POST(request: NextRequest) {
     writeFileSync(settingsDir + "/RTMP.txt", data["RTMP"]);
     global.RTMP = data["RTMP"];
   } catch (e) {
-    return NextResponse.json({ err: e }, { status: 500 });
+    if (e instanceof Error) {
+      return NextResponse.json(
+        { err: e.message + " " + e.name + " " + e.cause + " " + e.stack },
+        { status: 500 }
+      );
+    } else {
+      return NextResponse.json({ err: "RATS!" }, { status: 500 });
+    }
   }
   //return
   return NextResponse.json({ msg: "ok" }, { status: 200 });
