@@ -2,12 +2,12 @@ export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
     const os = await import("node:os");
     const fs = await import("node:fs");
-    // const electron = await import("electron");
+    const electron = await import("electron");
 
     console.log("initializing global variables...");
 
-    const appDir = os.homedir() + "/Water360";
-    // const appDir = electron.app.getPath("appData");
+    // const appDir = os.homedir() + "/Water360";
+    const appDir = electron.app.getPath("appData");
     const downloadsDir = appDir;
     const settingsDir = appDir + "/user_settings";
 

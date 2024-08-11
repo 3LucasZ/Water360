@@ -1,6 +1,6 @@
 {
   "name": "water360",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "private": true,
   "main": "electron/main/main.js",
   "author": "3LucasZ <lucas.j.zheng@gmail.com>",
@@ -67,6 +67,9 @@
         "provider": "github"
       }
     ],
+    "mac": {
+      "entitlements": "resources/default.mas.plist"
+    },
     "dmg": {
       "title": "${productName} ${version}",
       "publish": [
@@ -83,6 +86,7 @@
       "target": "NSIS",
       "icon": "build/icon.ico",
       "signAndEditExecutable": false,
+      "requestedExecutionLevel": "highestAvailable",
       "publish": [
         "github"
       ]
