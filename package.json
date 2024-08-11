@@ -1,6 +1,6 @@
 {
   "name": "water360",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "main": "electron/main/main.js",
   "author": "3LucasZ <lucas.j.zheng@gmail.com>",
@@ -9,6 +9,7 @@
     "dev": "npm run dev-next & npm run start-electron",
     "build-mac": "npm run build-next && npm run build-electron && electron-builder -m",
     "build-windows": "npm run build-next && npm run build-electron && electron-builder -w --x64",
+    "release-macos": "npm run build-next && npm run build-electron && electron-builder -m --publish always",
     "release-windows": "npm run build-next && npm run build-electron && electron-builder -w --x64 --publish always",
     "dev-next": "next dev",
     "build-next": "next build",
