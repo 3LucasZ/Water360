@@ -16,6 +16,7 @@ import {
   Group,
   ActionIcon,
   Tooltip,
+  Switch,
 } from "@mantine/core";
 import {
   IconBrandYoutube,
@@ -37,6 +38,8 @@ export default function Home() {
   const [isPreviewing, setIsPreviewing] = useState(false);
   const [isCapturing, setIsCapturing] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+  const [isTimelapse, setIsTimelapse] = useState(false);
+  const [timelapseInterval, setTimelapseInterval] = useState(5000);
   const [isLivestreaming, setIsLivestreaming] = useState(false);
 
   const [previewData, setPreviewData] = useState("");
@@ -116,26 +119,31 @@ export default function Home() {
   );
   const recordFooter = (
     <Center>
-      <Group>
-        {previewButton}
-        <Button
-          radius={"xl"}
-          size="lg"
-          w={300}
-          onClick={async () => {
-            if (isRecording) {
-              const res = await under360("/command/stopRecord");
-            } else {
-              const res = await under360("/command/startRecord");
-            }
-            setIsRecording(!isRecording);
-          }}
-          color={isRecording ? "red" : "blue"}
-          leftSection={isRecording ? <IconPlayerStop /> : <IconVideo />}
-        >
-          {isRecording ? "Stop" : "Record"}
-        </Button>
-      </Group>
+      <Stack>
+        <Group>
+          {previewButton}
+          <Button
+            radius={"xl"}
+            size="lg"
+            w={300}
+            onClick={async () => {
+              if (isRecording) {
+                const res = await under360("/command/stopRecord");
+              } else {
+                const res = await under360("/command/startRecord");
+              }
+              setIsRecording(!isRecording);
+            }}
+            color={isRecording ? "red" : "blue"}
+            leftSection={isRecording ? <IconPlayerStop /> : <IconVideo />}
+          >
+            {isRecording ? "Stop" : "Record"}
+          </Button>
+        </Group>
+        <Group>
+          <Switch disabled={isRecording} label="Timelapse" />
+        </Group>
+      </Stack>
     </Center>
   );
   const livestreamFooter = (
