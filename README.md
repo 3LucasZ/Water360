@@ -18,16 +18,17 @@
 
 ## Welcome!
 
-Water360 is a desktop application available for Mac and Windows computers to connect to the Under360 server. It allows you to easily remote control an Insta360 camera.
+Water360 is a desktop application available for Mac and Windows to connect to the Under360 server. It enables the remote control of the Insta360 camera.
 
-## Getting Started
+## Usage
 
-1. Install the app on your computer.
+1. Find the latest release [here](https://github.com/3LucasZ/Water360/releases). Install the app on your computer.
 2. Update the IP address of your controller on the user settings page.
-3. Install the adb tool on your computer.
-4. Enjoy!
+3. Install adb.
 
-## Build
+## Developing
+
+### Build
 
 1. Build app from source for your platform: npm run build
 2. Build app for other platforms (TBD)
@@ -35,7 +36,7 @@ Water360 is a desktop application available for Mac and Windows computers to con
 - Check Rosetta installation: if /usr/bin/pgrep -q oahd; then echo 'rosetta installed'; fi
 - Find container PID: docker exec <id|name> ps
 
-## Develop
+### Dev environment
 
 1. Run: npm run dev
 
@@ -47,7 +48,7 @@ Water360 is a desktop application available for Mac and Windows computers to con
 - npm run -- env electron-builder --help
 - npm run -- env electron-builder --win --x64
 
-## Debugging
+### Debugging
 
 1. Check that the server is running.
 
@@ -73,7 +74,11 @@ Water360 is a desktop application available for Mac and Windows computers to con
 
 - Since there is no console.log on main process, wrap everything with try catch, and return it w/ the error code.
 
-## Error codes
+6. Do not try (or at least try to avoid) features marked experimental
+
+- Experimental features (like instrumentation hook) are bound to not work / crash
+
+### Error codes
 
 - 200: All good!
 - 500: Internal server error (generic)
