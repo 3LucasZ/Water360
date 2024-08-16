@@ -14,12 +14,14 @@ export async function POST(req: NextRequest) {
   }
   //adb connect <IP>
   const command = promisify(exec);
-  const { stdout, stderr } = await command("adb connect " + IP + ":5555");
+  const { stdout, stderr } = await command("adb connect " + IP + ":5555", {
+    timeout: 2000,
+  });
   console.log("stdout:", stdout);
   console.log("stderr:", stderr);
   //return
-  return NextResponse.json(
-    { stdout: "stdout", stderr: "stderr" },
-    { status: 200 }
-  );
+  if (stderr) {
+    return NextResponse.json({ err: stderr }, { status: 500 });
+  }
+  return NextResponse.json({ stdout, stderr }, { status: 200 });
 }

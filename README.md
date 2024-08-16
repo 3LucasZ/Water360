@@ -25,6 +25,18 @@ Water360 is a desktop application available for Mac and Windows to connect to th
 1. Find the latest release [here](https://github.com/3LucasZ/Water360/releases). Install the app on your computer.
 2. Update the IP address of your controller on the user settings page.
 3. Install adb.
+4. Enjoy!
+
+### Installing ADB
+
+1. [Windows](https://medium.com/@yadav-ajay/a-step-by-step-guide-to-setting-up-adb-path-on-windows-0b833faebf18)
+2. [Mac](https://stackoverflow.com/questions/31374085/installing-adb-on-macos)
+
+### Khadas unreachable
+
+1. Check what devices are reachable on your network. Then,
+1. Unplug and plug back in Ethernet OR
+1. Power cycle
 
 ## Developing
 
