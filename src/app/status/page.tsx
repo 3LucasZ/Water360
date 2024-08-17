@@ -38,6 +38,11 @@ export default function Home() {
     isCharging: false,
     batteryLevel: 0,
   });
+  const [camMetadata, setCamMetadata] = useState({
+    cameraType: "",
+    cameraVersion: "",
+    cameraSerial: "",
+  });
   //initial data fetch
   function getServerSideProps() {
     //station status
@@ -58,6 +63,9 @@ export default function Home() {
     //cam status
     under360("/status").then((res) =>
       res.json().then((json) => setCamStatus(json))
+    );
+    under360("/get/metadata").then((res) =>
+      res.json().then((json) => setCamMetadata(json))
     );
   }
   useEffect(() => {
@@ -125,37 +133,44 @@ export default function Home() {
       </DeviceCard>
       <DeviceCard name="Camera">
         <Center>
-          <Group>
-            <StatusBadge
-              isOn={camStatus.connected}
-              onLabel="Connected"
-              offLabel="Disconnected"
-            />
-            <Box pos={"relative"}>
-              <Progress
-                radius="xl"
-                h="25"
-                value={camStatus.batteryLevel * 0.9}
-                w={100}
-                animated={camStatus.isCharging}
-                color={
-                  camStatus.batteryLevel < 33
-                    ? "red"
-                    : camStatus.batteryLevel < 66
-                    ? "yellow"
-                    : "green"
-                }
+          <Stack>
+            <Group>
+              <Text>{camMetadata.cameraType}</Text>
+              <Text>{camMetadata.cameraVersion}</Text>
+              <Text>{camMetadata.cameraSerial}</Text>
+            </Group>
+            <Group>
+              <StatusBadge
+                isOn={camStatus.connected}
+                onLabel="Connected"
+                offLabel="Disconnected"
               />
-              <Overlay backgroundOpacity={0}>
-                <Center>
-                  {camStatus.isCharging && <IconBolt color="white" />}
-                  <Text color="white" fw={600}>
-                    {camStatus.batteryLevel}%
-                  </Text>
-                </Center>
-              </Overlay>
-            </Box>
-          </Group>
+              <Box pos={"relative"}>
+                <Progress
+                  radius="xl"
+                  h="25"
+                  value={camStatus.batteryLevel * 0.9}
+                  w={100}
+                  animated={camStatus.isCharging}
+                  color={
+                    camStatus.batteryLevel < 33
+                      ? "red"
+                      : camStatus.batteryLevel < 66
+                      ? "yellow"
+                      : "green"
+                  }
+                />
+                <Overlay backgroundOpacity={0}>
+                  <Center>
+                    {camStatus.isCharging && <IconBolt color="white" />}
+                    <Text c="white" fw={600}>
+                      {camStatus.batteryLevel}%
+                    </Text>
+                  </Center>
+                </Overlay>
+              </Box>
+            </Group>
+          </Stack>
         </Center>
         <SimpleGrid cols={2}>
           <Stack>
