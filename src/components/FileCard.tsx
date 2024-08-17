@@ -148,6 +148,8 @@ export default function FileCard({
                       setExporting(json["exporting"]);
                       if (json["exporting"]) {
                         checker();
+                      } else {
+                        refresh();
                       }
                     })
                   );
