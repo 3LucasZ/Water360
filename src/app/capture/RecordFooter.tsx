@@ -1,4 +1,5 @@
 import { under360 } from "@/services/api_helper";
+import { InstaCameraManager } from "@/services/InstaCameraManager";
 import { Center, Stack, Button, Switch, Group, Loader } from "@mantine/core";
 import { IconPlayerStop, IconVideo } from "@tabler/icons-react";
 import { ReactNode, useEffect, useState } from "react";
@@ -17,7 +18,9 @@ export default function PhotoFooter({
   }, []);
   async function getServerSideProps() {
     var status = await (await under360("/status/operation")).json();
-    setIsRecording(status["captureStatus"] == 1003);
+    setIsRecording(
+      status["captureStatus"] == InstaCameraManager.CAPTURE_TYPE_NORMAL_RECORD
+    );
   }
   return (
     <Center>

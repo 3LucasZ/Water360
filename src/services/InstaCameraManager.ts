@@ -1,4 +1,4 @@
-enum InstaCameraManager {
+export const enum InstaCameraManager {
   CONNECT_TYPE_NONE = -1,
   CONNECT_TYPE_USB = 1,
   CONNECT_TYPE_WIFI = 2,
