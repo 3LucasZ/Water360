@@ -35,7 +35,7 @@ export async function POST(
       method: "GET",
       headers: { "Content-Type": "application/json" },
       cache: forceCache ? "force-cache" : "default",
-      signal: AbortSignal.timeout(2000),
+      signal: AbortSignal.timeout(5000),
     });
     //return
     return res;
