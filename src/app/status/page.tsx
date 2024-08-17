@@ -20,10 +20,14 @@ import { MouseEventHandler, useEffect, useState } from "react";
 
 export default function Home() {
   //station status
-  const [adbInstalled, setAdbInstalled] = useState<boolean | undefined>(undefined);
+  const [adbInstalled, setAdbInstalled] = useState<boolean | undefined>(
+    undefined
+  );
   //khadas status
   const [pingable, setPingable] = useState<boolean | undefined>(undefined);
-  const [adbConnected, setAdbConnected] = useState<boolean | undefined>(undefined);
+  const [adbConnected, setAdbConnected] = useState<boolean | undefined>(
+    undefined
+  );
   const [isAppRun, setIsAppRun] = useState<boolean | undefined>(undefined);
   const [df, setDf] = useState({ freeSpace: 0, totalSpace: 0 });
   //cam status
@@ -32,7 +36,7 @@ export default function Home() {
     freeSpace: 0,
     totalSpace: 0,
     isCharging: false,
-    batteryLevel: 0
+    batteryLevel: 0,
   });
   //initial data fetch
   function getServerSideProps() {
@@ -57,7 +61,7 @@ export default function Home() {
     );
   }
   useEffect(() => {
-    getServerSideProps()
+    getServerSideProps();
     // Experimental infinite data fetching
     // const interval = setInterval(getServerSideProps, 1000); // Infinite interval fetching
     // return () => clearInterval(interval); // Cleanup on unmount
@@ -69,7 +73,9 @@ export default function Home() {
         <Center>
           <Group>
             <StatusBadge
-              isOn={adbInstalled} onLabel="ADB installed" offLabel="ADB not found"
+              isOn={adbInstalled}
+              onLabel="ADB installed"
+              offLabel="ADB not found"
             />
           </Group>
         </Center>
@@ -77,8 +83,16 @@ export default function Home() {
       <DeviceCard name="Khadas">
         <Center>
           <Group>
-            <StatusBadge isOn={pingable} onLabel="detected" offLabel="unpingable" />
-            <StatusBadge isOn={adbConnected} onLabel="connected" offLabel="disconnected" />
+            <StatusBadge
+              isOn={pingable}
+              onLabel="detected"
+              offLabel="unpingable"
+            />
+            <StatusBadge
+              isOn={adbConnected}
+              onLabel="connected"
+              offLabel="disconnected"
+            />
             <StatusBadge isOn={isAppRun} onLabel="app on" offLabel="app off" />
           </Group>
         </Center>
@@ -89,18 +103,21 @@ export default function Home() {
                 api("/khadas/wol");
               }}
               label="Wake"
+              refresh={getServerSideProps}
             />
             <CommandButton
               onClick={() => {
                 api("/khadas/adbConnect");
               }}
               label="Connect"
+              refresh={getServerSideProps}
             />
             <CommandButton
               onClick={() => {
                 api("/khadas/runApp");
               }}
               label="Run App"
+              refresh={getServerSideProps}
             />
           </Stack>
           <MemoryDisplay freeSpace={df.freeSpace} totalSpace={df.totalSpace} />
@@ -115,13 +132,28 @@ export default function Home() {
               offLabel="Disconnected"
             />
             <Box pos={"relative"}>
-              <Progress radius="xl" h="25" value={camStatus.batteryLevel * 0.9} w={100} animated={camStatus.isCharging}
-                color={camStatus.batteryLevel < 33 ? "red" : camStatus.batteryLevel < 66 ? "yellow" : "green"}
+              <Progress
+                radius="xl"
+                h="25"
+                value={camStatus.batteryLevel * 0.9}
+                w={100}
+                animated={camStatus.isCharging}
+                color={
+                  camStatus.batteryLevel < 33
+                    ? "red"
+                    : camStatus.batteryLevel < 66
+                    ? "yellow"
+                    : "green"
+                }
               />
               <Overlay backgroundOpacity={0}>
-                <Center>{camStatus.isCharging && <IconBolt color="white" />}
-                  <Text color="white" fw={600}>{camStatus.batteryLevel}%</Text>
-                </Center></Overlay>
+                <Center>
+                  {camStatus.isCharging && <IconBolt color="white" />}
+                  <Text color="white" fw={600}>
+                    {camStatus.batteryLevel}%
+                  </Text>
+                </Center>
+              </Overlay>
             </Box>
           </Group>
         </Center>
@@ -132,12 +164,14 @@ export default function Home() {
                 under360("/command/connect");
               }}
               label="Connect"
+              refresh={getServerSideProps}
             />
             <CommandButton
               onClick={() => {
                 under360("/command/disconnect");
               }}
               label="Disconnect"
+              refresh={getServerSideProps}
             />
           </Stack>
           <MemoryDisplay
@@ -168,23 +202,41 @@ function DeviceCard({
     </Paper>
   );
 }
-function CommandButton({ label, onClick }: { label: string; onClick: MouseEventHandler<HTMLButtonElement> }) {
-  return <Button
-    radius={"xl"}
-
-    onClick={onClick}
-    maw={300}
-  >
-    {/* <Text size="lg">{label}</Text> */}
-    {label}
-  </Button>
+function CommandButton({
+  label,
+  onClick,
+  refresh,
+}: {
+  label: string;
+  onClick: MouseEventHandler<HTMLButtonElement>;
+  refresh: Function;
+}) {
+  return (
+    <Button
+      radius={"xl"}
+      onClick={(e) => {
+        onClick(e);
+        setTimeout(refresh, 1000);
+      }}
+      maw={300}
+    >
+      {/* <Text size="lg">{label}</Text> */}
+      {label}
+    </Button>
+  );
 }
-function StatusBadge({ isOn, onLabel, offLabel }: { isOn: boolean | undefined; onLabel: string; offLabel: string; }) {
-  return <Badge
-    color={isOn ? "green" : "red"}
-    hidden={isOn === undefined}
-    size="lg"
-  >
-    {isOn ? onLabel : offLabel}
-  </Badge>
+function StatusBadge({
+  isOn,
+  onLabel,
+  offLabel,
+}: {
+  isOn: boolean | undefined;
+  onLabel: string;
+  offLabel: string;
+}) {
+  return (
+    <Badge color={isOn ? "green" : "red"} hidden={isOn === undefined} size="lg">
+      {isOn ? onLabel : offLabel}
+    </Badge>
+  );
 }
