@@ -1,5 +1,5 @@
 import { under360 } from "@/services/api_helper";
-import { Center, Stack, Button, Switch, Group } from "@mantine/core";
+import { Center, Stack, Button, Switch, Group, Loader } from "@mantine/core";
 import { IconPlayerStop, IconVideo } from "@tabler/icons-react";
 import { ReactNode, useEffect, useState } from "react";
 
@@ -9,6 +9,7 @@ export default function PhotoFooter({
   previewButton: ReactNode;
 }) {
   const [isRecording, setIsRecording] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [isTimelapse, setIsTimelapse] = useState(false);
   const [timelapseInterval, setTimelapseInterval] = useState(5000);
   useEffect(() => {
@@ -29,21 +30,34 @@ export default function PhotoFooter({
             w={300}
             onClick={async () => {
               if (isRecording) {
+                setIsLoading(true);
                 await under360("/command/stopRecord");
+                setTimeout(() => {
+                  setIsLoading(false);
+                  getServerSideProps();
+                }, 4000);
               } else {
                 await under360("/command/startRecord");
+                getServerSideProps();
               }
-              getServerSideProps();
             }}
             color={isRecording ? "red" : "blue"}
-            leftSection={isRecording ? <IconPlayerStop /> : <IconVideo />}
+            leftSection={
+              isLoading ? "" : isRecording ? <IconPlayerStop /> : <IconVideo />
+            }
           >
-            {isRecording ? "Stop" : "Record"}
+            {isLoading ? (
+              <Loader color="white" />
+            ) : isRecording ? (
+              "Stop"
+            ) : (
+              "Record"
+            )}
           </Button>
         </Group>
-        <Group>
+        {/* <Group>
           <Switch disabled={isRecording} label="Timelapse" />
-        </Group>
+        </Group> */}
       </Stack>
     </Center>
   );
