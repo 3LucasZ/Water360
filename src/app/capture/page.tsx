@@ -6,23 +6,15 @@ import {
   rem,
   SegmentedControl,
   Stack,
-  Image,
-  AspectRatio,
-  Button,
-  Container,
-  Loader,
-  Paper,
-  Box,
-  Group,
   ActionIcon,
   Tooltip,
-  Switch,
 } from "@mantine/core";
 import {
   IconBrandYoutube,
   IconCapture,
   IconPlayerPlay,
   IconPlayerStop,
+  IconSettings,
   IconVideo,
 } from "@tabler/icons-react";
 import { api, under360 } from "@/services/api_helper";
@@ -30,18 +22,13 @@ import Image360 from "@/components/Image360";
 import { responsiveBodyWidth } from "@/services/constants";
 import { isValidIP } from "@/services/mini_helper";
 import PlaceholderImage from "@/components/PlaceholderImage";
-// import WebSocket from "ws";
+import PhotoFooter from "./PhotoFooter";
+import RecordFooter from "./RecordFooter";
+import LivestreamFooter from "./LivestreamFooter";
 
 export default function Home() {
   const [mode, setMode] = useState("Photo");
-
   const [isPreviewing, setIsPreviewing] = useState(false);
-  const [isCapturing, setIsCapturing] = useState(false);
-  const [isRecording, setIsRecording] = useState(false);
-  const [isTimelapse, setIsTimelapse] = useState(false);
-  const [timelapseInterval, setTimelapseInterval] = useState(5000);
-  const [isLivestreaming, setIsLivestreaming] = useState(false);
-
   const [previewData, setPreviewData] = useState("");
   const [previewStamp, setPreviewStamp] = useState(0);
   const [ws, setWs] = useState<WebSocket | undefined>(undefined);
@@ -53,8 +40,6 @@ export default function Home() {
     var IP = (await (await api("/station/getSettings")).json())["IP"];
     var status = await (await under360("/status/operation")).json();
     setIsPreviewing(status["previewStatus"] == "NORMAL");
-    setIsRecording(status["captureStatus"] == "RECORD");
-    setIsLivestreaming(status["previewStatus"] == "LIVE");
     if (isValidIP(IP)) {
       if (isValidIP(IP, true)) {
         IP = "[" + IP + "]";
@@ -93,88 +78,28 @@ export default function Home() {
       </ActionIcon>
     </Tooltip>
   );
-
-  const photoFooter = (
-    <Center>
-      <Group>
-        {previewButton}
-        <Button
-          radius={"xl"}
-          size="lg"
-          w={300}
-          color="blue"
-          onClick={async () => {
-            const res = await under360("/command/capture");
-            setIsCapturing(true);
-            setTimeout(() => {
-              setIsCapturing(false);
-            }, 4000);
-          }}
-          leftSection={!isCapturing && <IconCapture />}
-        >
-          {isCapturing ? <Loader color="white" /> : "Capture"}
-        </Button>
-      </Group>
-    </Center>
-  );
-  const recordFooter = (
-    <Center>
-      <Stack>
-        <Group>
-          {previewButton}
-          <Button
-            radius={"xl"}
-            size="lg"
-            w={300}
-            onClick={async () => {
-              if (isRecording) {
-                const res = await under360("/command/stopRecord");
-              } else {
-                const res = await under360("/command/startRecord");
-              }
-              setIsRecording(!isRecording);
-            }}
-            color={isRecording ? "red" : "blue"}
-            leftSection={isRecording ? <IconPlayerStop /> : <IconVideo />}
-          >
-            {isRecording ? "Stop" : "Record"}
-          </Button>
-        </Group>
-        <Group>
-          <Switch disabled={isRecording} label="Timelapse" />
-        </Group>
-      </Stack>
-    </Center>
-  );
-  const livestreamFooter = (
-    <Center>
-      <Button
-        radius={"xl"}
-        size="lg"
-        w={300}
-        onClick={async () => {
-          if (isLivestreaming) {
-            const res = await under360("/command/stopLive");
-          } else {
-            ws?.close();
-            const res = await under360("/command/startLive");
-          }
-          setIsLivestreaming(!isLivestreaming);
-        }}
-        color={isLivestreaming ? "red" : "blue"}
-        leftSection={
-          isLivestreaming ? <IconPlayerStop /> : <IconBrandYoutube />
-        }
-      >
-        {isLivestreaming ? "Stop" : "Stream"}
-      </Button>
-    </Center>
+  const settingsButton = (
+    <ActionIcon color="gray" radius={"xl"} size={50}>
+      {<IconSettings />}
+    </ActionIcon>
   );
 
   const buttonDatas = [
-    { mode: "Photo", icon: IconCapture, body: photoFooter },
-    { mode: "Record", icon: IconVideo, body: recordFooter },
-    { mode: "Livestream", icon: IconBrandYoutube, body: livestreamFooter },
+    {
+      mode: "Photo",
+      icon: IconCapture,
+      body: <PhotoFooter previewButton={previewButton} />,
+    },
+    {
+      mode: "Record",
+      icon: IconVideo,
+      body: <RecordFooter previewButton={previewButton} />,
+    },
+    {
+      mode: "Livestream",
+      icon: IconBrandYoutube,
+      body: <LivestreamFooter ws={ws} />,
+    },
   ];
 
   const footer = buttonDatas.filter((data) => {
@@ -213,5 +138,3 @@ export default function Home() {
     </Center>
   );
 }
-
-const uri = "data:image/png;base64,";
