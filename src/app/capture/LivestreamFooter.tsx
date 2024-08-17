@@ -1,5 +1,5 @@
 import { under360 } from "@/services/api_helper";
-import { Center, Button } from "@mantine/core";
+import { Center, Button, Loader } from "@mantine/core";
 import { IconPlayerStop, IconBrandYoutube } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 
@@ -9,6 +9,7 @@ export default function LivestreamFooter({
   ws: WebSocket | undefined;
 }) {
   const [isLivestreaming, setIsLivestreaming] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     getServerSideProps();
   }, []);
@@ -24,19 +25,36 @@ export default function LivestreamFooter({
         w={300}
         onClick={async () => {
           if (isLivestreaming) {
-            await under360("/command/stopLive");
+            setIsLoading(true);
+            await under360("/command/stopLive", undefined, true);
+            setTimeout(() => {
+              setIsLoading(false);
+              getServerSideProps();
+            }, 4000);
           } else {
             ws?.close();
             await under360("/command/startLive");
+            getServerSideProps();
           }
-          getServerSideProps();
         }}
         color={isLivestreaming ? "red" : "blue"}
         leftSection={
-          isLivestreaming ? <IconPlayerStop /> : <IconBrandYoutube />
+          isLoading ? (
+            ""
+          ) : isLivestreaming ? (
+            <IconPlayerStop />
+          ) : (
+            <IconBrandYoutube />
+          )
         }
       >
-        {isLivestreaming ? "Stop" : "Stream"}
+        {isLoading ? (
+          <Loader color="white" />
+        ) : isLivestreaming ? (
+          "Stop"
+        ) : (
+          "Stream"
+        )}
       </Button>
     </Center>
   );
