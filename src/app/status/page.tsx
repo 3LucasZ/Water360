@@ -133,44 +133,44 @@ export default function Home() {
       </DeviceCard>
       <DeviceCard name="Camera">
         <Center>
-          <Stack>
-            <Group>
-              <Text>{camMetadata.cameraType}</Text>
-              <Text>{camMetadata.cameraVersion}</Text>
-              <Text>{camMetadata.cameraSerial}</Text>
-            </Group>
-            <Group>
-              <StatusBadge
-                isOn={camStatus.connected}
-                onLabel="Connected"
-                offLabel="Disconnected"
+          <Group>
+            <Text>{camMetadata.cameraType}</Text>
+            <Text>{camMetadata.cameraVersion}</Text>
+            <Text>{camMetadata.cameraSerial}</Text>
+          </Group>
+        </Center>
+        <Center>
+          <Group>
+            <StatusBadge
+              isOn={camStatus.connected}
+              onLabel="Connected"
+              offLabel="Disconnected"
+            />
+            <Box pos={"relative"}>
+              <Progress
+                radius="xl"
+                h="25"
+                value={camStatus.batteryLevel * 0.9}
+                w={100}
+                animated={camStatus.isCharging}
+                color={
+                  camStatus.batteryLevel < 33
+                    ? "red"
+                    : camStatus.batteryLevel < 66
+                    ? "yellow"
+                    : "green"
+                }
               />
-              <Box pos={"relative"}>
-                <Progress
-                  radius="xl"
-                  h="25"
-                  value={camStatus.batteryLevel * 0.9}
-                  w={100}
-                  animated={camStatus.isCharging}
-                  color={
-                    camStatus.batteryLevel < 33
-                      ? "red"
-                      : camStatus.batteryLevel < 66
-                      ? "yellow"
-                      : "green"
-                  }
-                />
-                <Overlay backgroundOpacity={0}>
-                  <Center>
-                    {camStatus.isCharging && <IconBolt color="white" />}
-                    <Text c="white" fw={600}>
-                      {camStatus.batteryLevel}%
-                    </Text>
-                  </Center>
-                </Overlay>
-              </Box>
-            </Group>
-          </Stack>
+              <Overlay backgroundOpacity={0}>
+                <Center>
+                  {camStatus.isCharging && <IconBolt color="white" />}
+                  <Text c="white" fw={600}>
+                    {camStatus.batteryLevel}%
+                  </Text>
+                </Center>
+              </Overlay>
+            </Box>
+          </Group>
         </Center>
         <SimpleGrid cols={2}>
           <Stack>
@@ -187,6 +187,13 @@ export default function Home() {
               }}
               label="Disconnect"
               refresh={getServerSideProps}
+            />
+            <CommandButton
+              onClick={() => {
+                under360("/command/init");
+              }}
+              label="First-time setup"
+              refresh={() => null}
             />
           </Stack>
           <MemoryDisplay
