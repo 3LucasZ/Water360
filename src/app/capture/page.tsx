@@ -78,11 +78,6 @@ export default function Home() {
       </ActionIcon>
     </Tooltip>
   );
-  const settingsButton = (
-    <ActionIcon color="gray" radius={"xl"} size={50}>
-      {<IconSettings />}
-    </ActionIcon>
-  );
 
   const buttonDatas = [
     {
