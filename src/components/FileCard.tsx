@@ -61,7 +61,7 @@ export default function FileCard({
         <Center h="100%">
           <Stack w={"80%"}>
             <Center>
-              <Text>{exportProgress}%</Text>
+              <Text c={"white"}>{exportProgress}%</Text>
             </Center>
             <Progress h={20} radius={"xl"} value={exportProgress} />
           </Stack>

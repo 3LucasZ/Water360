@@ -6,6 +6,7 @@ import PlaceholderImage from "@/components/PlaceholderImage";
 import Video360 from "@/components/Video360";
 import { api, under360 } from "@/services/api_helper";
 import { responsiveBodyWidth } from "@/services/constants";
+import { getFileStamp } from "@/services/file_helper";
 import { formatSize, formatTime } from "@/services/mini_helper";
 import {
   Badge,
@@ -47,6 +48,10 @@ export default function Home() {
           json["filePaths"]
             // @ts-ignore
             .filter((url) => url.includes(".jpg") || url.includes(".mp4"))
+            // @ts-ignore
+            .sort((a, b) => {
+              return -getFileStamp(a).localeCompare(getFileStamp(b));
+            })
         );
       })
     );
