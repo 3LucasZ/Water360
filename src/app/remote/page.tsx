@@ -27,13 +27,7 @@ export default function Home() {
   async function getServerSideProps() {
     under360("/ls").then((res) =>
       res.json().then((json) => {
-        if (res.status != 200) {
-          notifications.show({
-            title: "Error",
-            message: json["err"],
-            color: "red",
-          });
-        } else {
+        if (res.status == 200) {
           setCameraUrls(json["data"]);
         }
         setCameraUrlsLoading(false);
@@ -41,13 +35,7 @@ export default function Home() {
     );
     api("/khadas/ls").then((res) =>
       res.json().then((json) => {
-        if (res.status != 200) {
-          notifications.show({
-            title: "Error",
-            message: json["err"],
-            color: "red",
-          });
-        } else {
+        if (res.status == 200) {
           setKhadasUrls(json["data"]);
         }
         setKhadasUrlsLoading(false);
@@ -60,9 +48,7 @@ export default function Home() {
   const cards = cameraUrls
     .concat(khadasUrls)
     .sort((a, b) => {
-      var aa = a.substring(a.lastIndexOf("/") + 1);
-      var bb = b.substring(b.lastIndexOf("/") + 1);
-      return -aa.localeCompare(bb);
+      return -getFileStamp(a).localeCompare(getFileStamp(b));
     })
     .filter(
       (url) =>
