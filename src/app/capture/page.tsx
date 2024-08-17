@@ -8,6 +8,7 @@ import {
   Stack,
   ActionIcon,
   Tooltip,
+  Select,
 } from "@mantine/core";
 import {
   IconBrandYoutube,
@@ -25,6 +26,8 @@ import PlaceholderImage from "@/components/PlaceholderImage";
 import PhotoFooter from "./PhotoFooter";
 import RecordFooter from "./RecordFooter";
 import LivestreamFooter from "./LivestreamFooter";
+import { InstaCameraManager } from "@/services/InstaCameraManager";
+import WhiteBalance from "./WhiteBalance";
 
 export default function Home() {
   const [mode, setMode] = useState("Photo");
@@ -129,6 +132,7 @@ export default function Home() {
           <PlaceholderImage />
         )}
         {footer}
+        <WhiteBalance />
       </Stack>
     </Center>
   );
