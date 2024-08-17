@@ -9,6 +9,7 @@ import {
   ActionIcon,
   Tooltip,
   Select,
+  Space,
 } from "@mantine/core";
 import {
   IconBrandYoutube,
@@ -28,21 +29,23 @@ import RecordFooter from "./RecordFooter";
 import LivestreamFooter from "./LivestreamFooter";
 import { InstaCameraManager } from "@/services/InstaCameraManager";
 import WhiteBalance from "./WhiteBalance";
+import ISO from "./ISO";
+import dynamic from "next/dynamic";
 
 export default function Home() {
   const [mode, setMode] = useState("Photo");
   const [isPreviewing, setIsPreviewing] = useState(false);
+  const [isActive, setIsActive] = useState(false);
   const [previewData, setPreviewData] = useState("");
   const [previewStamp, setPreviewStamp] = useState(0);
   const [ws, setWs] = useState<WebSocket | undefined>(undefined);
 
   useEffect(() => {
-    getServerSideProps();
+    staticInit();
   }, []);
-  async function getServerSideProps() {
+  async function staticInit() {
+    await dynamicInit();
     var IP = (await (await api("/station/getSettings")).json())["IP"];
-    var status = await (await under360("/status/operation")).json();
-    setIsPreviewing(status["previewStatus"] == "NORMAL");
     if (isValidIP(IP)) {
       if (isValidIP(IP, true)) {
         IP = "[" + IP + "]";
@@ -60,6 +63,14 @@ export default function Home() {
       };
     }
   }
+  async function dynamicInit() {
+    var status = await (await under360("/status/operation")).json();
+    setIsPreviewing(status["previewStatus"] == "NORMAL");
+    setIsActive(
+      status["captureStatus"] != InstaCameraManager.CAPTURE_TYPE_IDLE ||
+        status["previewStatus"] != "IDLE"
+    );
+  }
 
   const previewButton = (
     <Tooltip label={previewStamp % 10000}>
@@ -67,11 +78,11 @@ export default function Home() {
         color="blue"
         onClick={async () => {
           if (isPreviewing) {
-            const res = await under360("/command/stopPreviewNormal");
-            setIsPreviewing(false);
+            await under360("/command/stopPreviewNormal");
+            dynamicInit();
           } else {
-            const res = await under360("/command/startPreviewNormal");
-            if (res.status == 200) setIsPreviewing(true);
+            await under360("/command/startPreviewNormal");
+            dynamicInit();
           }
         }}
         radius={"xl"}
@@ -133,6 +144,8 @@ export default function Home() {
         )}
         {footer}
         <WhiteBalance />
+        <ISO />
+        <Space />
       </Stack>
     </Center>
   );
