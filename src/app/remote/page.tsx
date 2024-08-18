@@ -59,7 +59,7 @@ export default function Home() {
       const fileType =
         getFileSuffix(url) == "insp" || getFileSuffix(url) == "jpg"
           ? FileType.IMAGE
-          : getFilePrefix(url) == "insv" || getFileSuffix(url) == "mp4"
+          : getFileSuffix(url) == "insv" || getFileSuffix(url) == "mp4"
           ? FileType.VIDEO
           : FileType.UNKNOWN;
       const onCamera = url.includes("http");
