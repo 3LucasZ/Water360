@@ -77,8 +77,11 @@ export default function FileCard({
       />
       <Card radius="md" withBorder>
         <Stack>
-          <Text fw={500} truncate="end">
-            {fileName}
+          <Text
+            fw={500}
+            // truncate="end"
+          >
+            {fileName.replaceAll("_", " ")}
           </Text>
           <Group>
             <Badge color={onCamera ? "blue" : "cyan"}>

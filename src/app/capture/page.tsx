@@ -24,14 +24,14 @@ import Image360 from "@/components/Image360";
 import { responsiveBodyWidth } from "@/services/constants";
 import { isValidIP } from "@/services/mini_helper";
 import PlaceholderImage from "@/components/PlaceholderImage";
-import PhotoFooter from "./PhotoFooter";
-import RecordFooter from "./RecordFooter";
-import LivestreamFooter from "./LivestreamFooter";
+import PhotoFooter from "./Footers/PhotoFooter";
+import RecordFooter from "./Footers/RecordFooter";
+import LivestreamFooter from "./Footers/LivestreamFooter";
 import { InstaCameraManager } from "@/services/InstaCameraManager";
-import WhiteBalance from "./WhiteBalance";
-import ISO from "./ISO";
+import WhiteBalance from "./Settings/WhiteBalance";
+import ISO from "./Settings/ISO";
 import dynamic from "next/dynamic";
-import CaptureResolution from "./CaptureResolution";
+import CaptureResolution from "./Settings/CaptureResolution";
 
 export default function Home() {
   const [mode, setMode] = useState("Photo");
