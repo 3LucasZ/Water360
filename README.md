@@ -107,5 +107,6 @@ Water360 is a desktop application available for Mac and Windows to connect to th
 - White balance: 0 (WHITE_BALANCE_AUTO)
 - Exposure mode: 0 (EXPOSURE_MODE_AUTO)
 - Exposure EV: 0.0
+- ISO: 0
 - Shutter mode: 1 (SHUTTER_MODE_SPORT)
 - Gamma mode: 2 (GAMMA_MODE_VIVID)

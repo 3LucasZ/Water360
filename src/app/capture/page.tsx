@@ -35,6 +35,7 @@ import CaptureResolution from "./Settings/CaptureResolution";
 import ExposureMode from "./Settings/ExposureMode";
 import ExposureEV from "./Settings/ExposureEV";
 import ShutterMode from "./Settings/ShutterMode";
+import GammaMode from "./Settings/GammaMode";
 
 export default function Home() {
   const [mode, setMode] = useState("Photo");
@@ -165,6 +166,7 @@ export default function Home() {
         <WhiteBalance />
         <ISO />
         <ShutterMode />
+        <GammaMode />
         <Space />
       </Stack>
     </Center>
