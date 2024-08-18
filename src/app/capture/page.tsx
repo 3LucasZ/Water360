@@ -31,6 +31,7 @@ import { InstaCameraManager } from "@/services/InstaCameraManager";
 import WhiteBalance from "./WhiteBalance";
 import ISO from "./ISO";
 import dynamic from "next/dynamic";
+import CaptureResolution from "./CaptureResolution";
 
 export default function Home() {
   const [mode, setMode] = useState("Photo");
@@ -143,6 +144,7 @@ export default function Home() {
           <PlaceholderImage />
         )}
         {footer}
+        {/* <CaptureResolution /> */}
         <WhiteBalance />
         <ISO />
         <Space />

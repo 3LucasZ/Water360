@@ -66,3 +66,7 @@ export function formatSize(size: number): string {
   }
   return size.toPrecision(3) + " " + suffix;
 }
+export function formatRes(res: string): string {
+  const b = res.split("_");
+  return b[1] + "x" + b[2] + "@" + b[3].substring(0, b[3].length - 3) + "FPS";
+}
