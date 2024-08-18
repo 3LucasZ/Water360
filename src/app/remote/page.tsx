@@ -9,7 +9,16 @@ import {
   getFileSuffix,
 } from "@/services/file_helper";
 import { FileType } from "@/services/FileType";
-import { SimpleGrid, Stack, TextInput, Center, Loader } from "@mantine/core";
+import {
+  SimpleGrid,
+  Stack,
+  TextInput,
+  Center,
+  Loader,
+  MultiSelect,
+  Button,
+  Group,
+} from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconSearch } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
@@ -19,6 +28,7 @@ export default function Home() {
   // TODO: optional feature if requested
   // const [onCameraFilter, setOnCameraFilter] = useState(undefined);
   // const [fileTypeFilter, setFileTypeFilter] = useState(undefined);
+  const [HDRUrls, setHDRUrls] = useState<string[]>([]);
 
   const [cameraUrls, setCameraUrls] = useState<string[]>([]);
   const [cameraUrlsLoading, setCameraUrlsLoading] = useState(true);
@@ -102,6 +112,29 @@ export default function Home() {
             setSearch(event.target.value);
           }}
         />
+        <MultiSelect
+          label="Generate HDR"
+          placeholder="Pick urls to merge"
+          data={khadasUrls
+            .filter(
+              (url) =>
+                (getFileSuffix(url) == "jpg" || getFileSuffix(url) == "insp") &&
+                getFilePrefix(url) == "IMG"
+            )
+            .sort((a, b) => getFileStamp(a).localeCompare(getFileStamp(b)))}
+          onChange={setHDRUrls}
+          value={HDRUrls}
+          clearable
+          searchable
+          comboboxProps={{ position: "top" }}
+        />
+        <Button
+          onClick={async () => {
+            await under360("/export/hdr", { urls: HDRUrls.toString() });
+          }}
+        >
+          Generate HDR
+        </Button>
         {cameraUrlsLoading && khadasUrlsLoading && (
           <Center h="300" mah={"50vh"}>
             <Loader size={"xl"} type="bars" color="pink" />
