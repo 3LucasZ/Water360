@@ -34,6 +34,7 @@ import {
 } from "@tabler/icons-react";
 import { lstat } from "fs";
 import { useEffect, useState } from "react";
+import SimpleFileCard from "./SimpleFileCard";
 
 export default function Home() {
   const [filePaths, setFilePaths] = useState<string[]>([]);
@@ -69,6 +70,7 @@ export default function Home() {
         fileName={fileName}
         fileType={fileType}
         setTar={setTarUrl}
+        refresh={getServerSideProps}
       />
     );
   });
@@ -91,68 +93,5 @@ export default function Home() {
         {cards}
       </SimpleGrid>
     </Stack>
-  );
-}
-
-function SimpleFileCard({
-  filePath,
-  fileName,
-  fileType,
-  setTar,
-}: {
-  filePath: string;
-  fileName: string;
-  fileType: FileType;
-  setTar: Function;
-}) {
-  const [fileSize, setFileSize] = useState(0);
-  function getServerSideProps() {
-    api("/station/inspect", { url: filePath }).then((res) =>
-      res.json().then((json) => setFileSize(json["fileSize"]))
-    );
-  }
-  useEffect(() => {
-    getServerSideProps();
-  });
-  return (
-    <Card radius="md" withBorder>
-      <Stack>
-        <Text fw={500} truncate="end">
-          {fileName}
-        </Text>
-        <Group>
-          <Badge
-            color={
-              fileType == FileType.IMAGE
-                ? "indigo"
-                : fileType == FileType.VIDEO
-                ? "grape"
-                : "violet"
-            }
-          >
-            {fileType == FileType.IMAGE
-              ? "IMAGE"
-              : fileType == FileType.VIDEO
-              ? "VIDEO"
-              : "UNKNOWN"}
-          </Badge>
-          <Text>Size: {formatSize(fileSize)}</Text>
-          <Flex justify={"flex-end"} direction="row" style={{ flexGrow: 1 }}>
-            <ActionIcon
-              variant="default"
-              size="md"
-              onClick={() => {
-                // api("/station/pathToFileURL", { path: filePath }).then((res) =>
-                //   res.json().then((json) => setTar(json["fileURL"]))
-                // );
-                setTar("/api/station/asset" + filePath);
-              }}
-            >
-              <IconEye stroke={1.5} />
-            </ActionIcon>
-          </Flex>
-        </Group>
-      </Stack>
-    </Card>
   );
 }
