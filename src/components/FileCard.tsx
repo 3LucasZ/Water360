@@ -51,10 +51,13 @@ export default function FileCard({
     creationTime: 0,
   });
   useEffect(() => {
+    getServerSideProps();
+  }, []);
+  function getServerSideProps() {
     under360("/inspect", { url: filePath }).then((res) =>
       res.json().then((json) => setData(json))
     );
-  }, []);
+  }
   const [isDeleting, setIsDeleting] = useState(false);
   return (
     <Box pos="relative">
@@ -124,9 +127,7 @@ export default function FileCard({
               disabled={data.creationTime == 0}
               onClick={async () => {
                 open();
-                under360("/inspect", { url: filePath }).then((res) =>
-                  res.json().then((json) => setData(json))
-                );
+                getServerSideProps();
               }}
             >
               <IconFileInfo stroke={1.5} />
