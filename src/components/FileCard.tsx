@@ -196,6 +196,7 @@ export default function FileCard({
                   refresh();
                 }, 1000);
               }}
+              aria-label={"trash"}
             >
               <IconTrash stroke={1.5} />
             </Button>
@@ -232,7 +233,7 @@ export default function FileCard({
               Timestamp: {new Date(data.creationTime).toLocaleString()}
             </List.Item> */}
             <List.Item>ID: {data.creationTime}</List.Item>
-            <List.Item>HDR: {data.isHDR.toString()}</List.Item>
+            <List.Item>Pre-HDR fragment: {data.isHDR.toString()}</List.Item>
             <List.Item>Pureshot: {data.supportPureshot.toString()}</List.Item>
             <List.Item>
               URLs for delete:{" "}
