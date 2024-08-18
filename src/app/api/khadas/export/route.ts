@@ -5,12 +5,12 @@ import { WritableStream } from "@yume-chan/stream-extra";
 import fsPromises from "node:fs/promises";
 import fs from "fs";
 import { write } from "node:fs";
+import { getFileName } from "@/services/file_helper";
 
 export async function POST(request: NextRequest) {
   try {
     //get data
-    const fileName = (await request.json())["url"];
-    const filePath = "/storage/emulated/0/Pictures/SDK_DEMO_EXPORT/" + fileName;
+    const filePath = (await request.json())["url"];
     //adb setup
     const connector: AdbServerNodeTcpConnector = new AdbServerNodeTcpConnector({
       host: "localhost",
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     const sync: AdbSync = await adb.sync();
     //export setup
     var writeStream = fs.createWriteStream(
-      global.downloadsDir + "/" + fileName,
+      global.downloadsDir + "/" + getFileName(filePath),
       { flags: "w" }
     );
     global.exporting = true;
