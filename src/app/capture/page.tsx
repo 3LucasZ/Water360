@@ -34,6 +34,7 @@ import dynamic from "next/dynamic";
 import CaptureResolution from "./Settings/CaptureResolution";
 import ExposureMode from "./Settings/ExposureMode";
 import ExposureEV from "./Settings/ExposureEV";
+import ShutterMode from "./Settings/ShutterMode";
 
 export default function Home() {
   const [mode, setMode] = useState("Photo");
@@ -163,6 +164,7 @@ export default function Home() {
         <ExposureEV />
         <WhiteBalance />
         <ISO />
+        <ShutterMode />
         <Space />
       </Stack>
     </Center>
