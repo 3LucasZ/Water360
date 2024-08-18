@@ -4,8 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   //get data
-  const fileName = (await request.json())["url"];
-  const filePath = "/storage/emulated/0/Pictures/SDK_DEMO_EXPORT/" + fileName;
+  const filePath = (await request.json())["url"];
   //setup adb
   const connector: AdbServerNodeTcpConnector = new AdbServerNodeTcpConnector({
     host: "localhost",
