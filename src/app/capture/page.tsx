@@ -43,6 +43,18 @@ export default function Home() {
 
   useEffect(() => {
     staticInit();
+    function beforeUnload(e: BeforeUnloadEvent) {
+      // e.preventDefault();
+      console.log("unmounting component...");
+      ws?.close();
+      under360("/command/stopPreviewNormal");
+    }
+
+    window.addEventListener("beforeunload", beforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", beforeUnload);
+    };
   }, []);
   async function staticInit() {
     await dynamicInit();
