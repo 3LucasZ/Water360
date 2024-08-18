@@ -49,6 +49,12 @@ export default function FileCard({
     durationInMs: 0,
     bitrate: 0,
     creationTime: 0,
+    //mini
+    isHDR: false,
+    supportPureshot: false,
+    urlsForDelete: ["N/A"],
+    urls: ["N/A"],
+    urlsRaw: ["N/A"],
   });
   useEffect(() => {
     getServerSideProps();
@@ -226,6 +232,22 @@ export default function FileCard({
               Timestamp: {new Date(data.creationTime).toLocaleString()}
             </List.Item> */}
             <List.Item>ID: {data.creationTime}</List.Item>
+            <List.Item>HDR: {data.isHDR.toString()}</List.Item>
+            <List.Item>Pureshot: {data.supportPureshot.toString()}</List.Item>
+            <List.Item>
+              URLs for delete:{" "}
+              {data.urlsForDelete
+                .map((url) => url.replaceAll("_", " "))
+                .toString()}
+            </List.Item>
+            <List.Item>
+              URLs:{" "}
+              {data.urls.map((url) => url.replaceAll("_", " ")).toString()}
+            </List.Item>
+            <List.Item>
+              URLs raw:{" "}
+              {data.urlsRaw.map((url) => url.replaceAll("_", " ")).toString()}
+            </List.Item>
           </List>
         </Modal>
       </Box>
