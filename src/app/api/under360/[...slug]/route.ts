@@ -37,7 +37,7 @@ export async function POST(
     const res = await fetch(call, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
-      cache: cacheStrategy,
+      // cache: cacheStrategy,
       signal: AbortSignal.timeout(timeout),
     });
     //return
