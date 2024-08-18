@@ -7,6 +7,7 @@ import Video360 from "@/components/Video360";
 import { api, under360 } from "@/services/api_helper";
 import { responsiveBodyWidth } from "@/services/constants";
 import { getFileStamp } from "@/services/file_helper";
+import { FileType } from "@/services/FileType";
 import { formatSize, formatTime } from "@/services/mini_helper";
 import {
   Badge,
@@ -60,7 +61,7 @@ export default function Home() {
   const cards = filePaths.map((url) => {
     const fileName = url.substring(url.lastIndexOf("/") + 1);
     const fileSuffix = url.split(".").pop();
-    const fileType = fileSuffix == "jpg" ? 1 : 2;
+    const fileType = fileSuffix == "jpg" ? FileType.IMAGE : FileType.VIDEO;
     return (
       <SimpleFileCard
         key={url}
@@ -101,7 +102,7 @@ function SimpleFileCard({
 }: {
   filePath: string;
   fileName: string;
-  fileType: number;
+  fileType: FileType;
   setTar: Function;
 }) {
   const [fileSize, setFileSize] = useState(0);
@@ -122,10 +123,18 @@ function SimpleFileCard({
         <Group>
           <Badge
             color={
-              fileType == 1 ? "indigo" : fileType == 2 ? "grape" : "violet"
+              fileType == FileType.IMAGE
+                ? "indigo"
+                : fileType == FileType.VIDEO
+                ? "grape"
+                : "violet"
             }
           >
-            {fileType == 1 ? "IMAGE" : fileType == 2 ? "VIDEO" : "TMP"}
+            {fileType == FileType.IMAGE
+              ? "IMAGE"
+              : fileType == FileType.VIDEO
+              ? "VIDEO"
+              : "UNKNOWN"}
           </Badge>
           <Text>Size: {formatSize(fileSize)}</Text>
           <Flex justify={"flex-end"} direction="row" style={{ flexGrow: 1 }}>

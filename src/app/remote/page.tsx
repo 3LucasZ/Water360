@@ -8,6 +8,7 @@ import {
   getFileStamp,
   getFileSuffix,
 } from "@/services/file_helper";
+import { FileType } from "@/services/FileType";
 import { SimpleGrid, Stack, TextInput, Center, Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconSearch } from "@tabler/icons-react";
@@ -57,10 +58,10 @@ export default function Home() {
     .map((url) => {
       const fileType =
         getFileSuffix(url) == "insp" || getFileSuffix(url) == "jpg"
-          ? 1
-          : getFilePrefix(url) == "LRV"
-          ? 3
-          : 2;
+          ? FileType.IMAGE
+          : getFilePrefix(url) == "insv" || getFileSuffix(url) == "mp4"
+          ? FileType.VIDEO
+          : FileType.UNKNOWN;
       const onCamera = url.includes("http");
       var date;
       try {

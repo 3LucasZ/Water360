@@ -1,4 +1,5 @@
 import { under360, api } from "@/services/api_helper";
+import { FileType } from "@/services/FileType";
 import { formatSize, formatTime } from "@/services/mini_helper";
 import {
   Box,
@@ -32,7 +33,7 @@ export default function FileCard({
   refresh: Function;
   filePath: string;
   fileName: string;
-  fileType: number;
+  fileType: FileType;
   date: string;
 }) {
   //exporting
@@ -89,10 +90,18 @@ export default function FileCard({
             </Badge>
             <Badge
               color={
-                fileType == 1 ? "indigo" : fileType == 2 ? "grape" : "violet"
+                fileType == FileType.IMAGE
+                  ? "indigo"
+                  : fileType == FileType.VIDEO
+                  ? "grape"
+                  : "violet"
               }
             >
-              {fileType == 1 ? "IMAGE" : fileType == 2 ? "VIDEO" : "TMP"}
+              {fileType == FileType.IMAGE
+                ? "IMAGE"
+                : fileType == FileType.VIDEO
+                ? "VIDEO"
+                : "TMP"}
             </Badge>
           </Group>
           <Text>{date}</Text>
@@ -101,7 +110,7 @@ export default function FileCard({
           </Skeleton>
           <Skeleton visible={data.creationTime == 0}>
             <Text>
-              {fileType == 2
+              {fileType == FileType.VIDEO
                 ? "Duration: " + formatTime(data.durationInMs / 1000)
                 : "Resolution: " + data.height + "x" + data.width}
             </Text>
@@ -130,7 +139,8 @@ export default function FileCard({
               onClick={async () => {
                 if (onCamera) {
                   await under360(
-                    "/export" + (fileType == 1 ? "/image" : "/video"),
+                    "/export" +
+                      (fileType == FileType.IMAGE ? "/image" : "/video"),
                     {
                       url: filePath,
                     }
@@ -202,11 +212,13 @@ export default function FileCard({
             <List.Item>
               Resolution: {data.height}x{data.width}
             </List.Item>
-            <List.Item hidden={fileType == 1}>FPS: {data.fps}</List.Item>
-            <List.Item hidden={fileType == 1}>
+            <List.Item hidden={fileType == FileType.IMAGE}>
+              FPS: {data.fps}
+            </List.Item>
+            <List.Item hidden={fileType == FileType.IMAGE}>
               Duration: {formatTime(data.durationInMs / 1000)}
             </List.Item>
-            <List.Item hidden={fileType == 1}>
+            <List.Item hidden={fileType == FileType.IMAGE}>
               Bitrate: {formatSize(data.bitrate)}
             </List.Item>
             {/* <List.Item>
