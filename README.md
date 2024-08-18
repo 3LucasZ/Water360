@@ -97,3 +97,14 @@ Water360 is a desktop application available for Mac and Windows to connect to th
   - Notification pop-ups
 - 504: Gateway Timeout (server acting as a proxy to Khadas did not receive a timely response)
   - No notification pop-ups
+
+### adb path
+
+- /storage/emulated/0/Android/data/com.example.kotlininsta360demo/cache
+
+### default settings
+
+- White balance: 0 (WHITE_BALANCE_AUTO)
+- Exposure mode: 0 (EXPOSURE_MODE_AUTO)
+- Shutter mode: 1 (SHUTTER_MODE_SPORT)
+- Gamma mode: 2 (GAMMA_MODE_VIVID)
