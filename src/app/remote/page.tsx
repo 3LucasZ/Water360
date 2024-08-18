@@ -65,11 +65,11 @@ export default function Home() {
       const onCamera = url.includes("http");
       var date;
       try {
-        const dateStr = url.split("_")[1];
+        const dateStr = getFileName(url).split("_")[1];
         const yr = Number(dateStr.substring(0, 4));
         const m = Number(dateStr.substring(4, 6));
         const d = Number(dateStr.substring(6, 8));
-        const timeStr = url.split("_")[2];
+        const timeStr = getFileName(url).split("_")[2];
         const hr = Number(timeStr.substring(0, 2));
         const min = Number(timeStr.substring(2, 4));
         const sec = Number(timeStr.substring(4, 6));
