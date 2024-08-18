@@ -32,6 +32,7 @@ import WhiteBalance from "./Settings/WhiteBalance";
 import ISO from "./Settings/ISO";
 import dynamic from "next/dynamic";
 import CaptureResolution from "./Settings/CaptureResolution";
+import ExposureMode from "./Settings/ExposureMode";
 
 export default function Home() {
   const [mode, setMode] = useState("Photo");
@@ -157,6 +158,7 @@ export default function Home() {
         )}
         {footer}
         {/* <CaptureResolution /> */}
+        <ExposureMode />
         <WhiteBalance />
         <ISO />
         <Space />

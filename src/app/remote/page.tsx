@@ -112,7 +112,7 @@ export default function Home() {
             setSearch(event.target.value);
           }}
         />
-        <MultiSelect
+        {/* <MultiSelect
           label="Generate HDR"
           placeholder="Pick urls to merge"
           data={khadasUrls
@@ -134,7 +134,7 @@ export default function Home() {
           }}
         >
           Generate HDR
-        </Button>
+        </Button> */}
         {cameraUrlsLoading && khadasUrlsLoading && (
           <Center h="300" mah={"50vh"}>
             <Loader size={"xl"} type="bars" color="pink" />
