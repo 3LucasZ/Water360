@@ -27,15 +27,18 @@ export async function POST(
   const port = 8080;
   const call = protocol + "://" + IP + ":" + port + proxyRoute;
   console.log("under360:", call);
-  //apply forceCache on certain commands
-  const forceCache = proxyRoute.includes("inspect");
+  //set cacheStrategy and timeout
+  const cacheStrategy = proxyRoute.includes("inspect")
+    ? "force-cache"
+    : "default";
+  const timeout = proxyRoute.includes("inspect") ? 20000 : 5000;
   //perform proxy request
   try {
     const res = await fetch(call, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
-      cache: forceCache ? "force-cache" : "default",
-      signal: AbortSignal.timeout(5000),
+      cache: cacheStrategy,
+      signal: AbortSignal.timeout(timeout),
     });
     //return
     return res;
