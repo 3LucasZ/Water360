@@ -34,40 +34,38 @@ Water360 is a desktop application available for Mac and Windows to connect to th
 
 ### Khadas unreachable
 
-1. Check what devices are reachable on your network. Then,
-1. Unplug and plug back in Ethernet OR
-1. Power cycle
+- Check what devices are reachable on your network. Then,
+- Unplug and plug back in Ethernet OR
+- Power cycle
+
+### Debugging
+
+1. Check that the water360 server is running.
+
+- Run: lsof -nP -i6TCP | grep LISTEN | grep water
+- You should see: water360 ... 30011 (LISTEN)
 
 ## Developing
 
 ### Build
 
-1. Build app from source for your platform: npm run build
-2. Build app for other platforms (TBD)
-
-- Check Rosetta installation: if /usr/bin/pgrep -q oahd; then echo 'rosetta installed'; fi
-- Find container PID: docker exec <id|name> ps
+1. Fork repo and use the GH actions already setup to automatically build the app for Windows and Mac.
 
 ### Dev environment
 
 1. Run: npm run dev
 
 - This starts a NextJS server and an Electron webview in parallel
-- Provides hot reload and debugging tools
+- Hot reload and debugging tools available
 
-2. Explore tooling
+2. Explore tooling. Ex:
 
 - npm run -- env electron-builder --help
 - npm run -- env electron-builder --win --x64
 
 ### Debugging
 
-1. Check that the server is running.
-
-- Run: lsof -nP -i6TCP | grep LISTEN | grep water
-- You should see: water360 ... 30011 (LISTEN)
-- This means a server at port 30011 is running
-
+1. Check node: lsof -nP -i4TCP | grep LISTEN | grep node
 2. Run inspect element on the app.
 3. Check that adb is running on port 5037.
 
@@ -77,18 +75,22 @@ Water360 is a desktop application available for Mac and Windows to connect to th
 - You should see: adb ... 5037 (LISTEN)
 - adb MUST be running on port 5037
 
-4. Directories
+4. Try catch
+
+- Since there is no console.log on main process, wrap everything with try catch, and return it w/ the error code.
+
+5. Do not try (or at least try to avoid) features marked experimental. Experimental features (like instrumentation hook) are bound to not work / crash
+
+### Directories
+
+Local
 
 - /Applications
 - /Users/lucaszheng/Library/Application Support/water360
 
-5. Try catch
+Khadas
 
-- Since there is no console.log on main process, wrap everything with try catch, and return it w/ the error code.
-
-6. Do not try (or at least try to avoid) features marked experimental
-
-- Experimental features (like instrumentation hook) are bound to not work / crash
+- /storage/emulated/0/Android/data/com.example.kotlininsta360demo/cache
 
 ### Error codes
 
@@ -98,11 +100,7 @@ Water360 is a desktop application available for Mac and Windows to connect to th
 - 504: Gateway Timeout (server acting as a proxy to Khadas did not receive a timely response)
   - No notification pop-ups
 
-### adb path
-
-- /storage/emulated/0/Android/data/com.example.kotlininsta360demo/cache
-
-### default settings
+### Default settings
 
 - White balance: 0 (WHITE_BALANCE_AUTO)
 - Exposure mode: 0 (EXPOSURE_MODE_AUTO)
