@@ -35,7 +35,7 @@ jobs:
       # install.sh
       - name: install.sh
         shell: bash
-        run: ${GITHUB_WORKSPACE}\installer.sh -w
+        run: ${GITHUB_WORKSPACE}/installer.sh -w
       # install node v20
       - uses: actions/setup-node@master
         with:
