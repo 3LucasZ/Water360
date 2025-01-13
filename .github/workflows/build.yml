@@ -15,7 +15,7 @@ jobs:
       # install.sh
       - name: install.sh
         shell: bash
-        run: ./install.sh
+        run: install.sh
       # install node v20
       - uses: actions/setup-node@master
         with:
@@ -35,7 +35,7 @@ jobs:
       # install.sh
       - name: install.sh
         shell: bash
-        run: ./install.sh
+        run: install.sh
       # install node v20
       - uses: actions/setup-node@master
         with:
