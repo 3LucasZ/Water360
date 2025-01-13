@@ -76,13 +76,19 @@ export function getAdbPath(dirPath: string) {
   var adbPath = dirPath;
   for (let i = 0; i < 100; i++) {
     if (
-      path.basename(adbPath) == "Contents" || // mac production
       path.basename(adbPath) == "Water360" || // development
+      path.basename(adbPath) == "Contents" || // mac production
       path.basename(adbPath) == "water360" // windows production
     )
       break;
     adbPath = path.dirname(adbPath);
   }
-  adbPath = path.join(adbPath, "platform-tools", "adb");
+  if (
+    path.basename(adbPath) == "water360" // windows production
+  ) {
+    adbPath = path.join(adbPath, "platform-tools", "adb.exe");
+  } else {
+    adbPath = path.join(adbPath, "platform-tools", "adb");
+  }
   return adbPath;
 }
