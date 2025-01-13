@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import commandExists from "command-exists";
 import path from "path";
-import { getAdbPath } from "../info/route";
+import { getAdbPath } from "@/services/mini_helper";
 import { existsSync } from "fs";
 
 export async function POST(request: NextRequest) {

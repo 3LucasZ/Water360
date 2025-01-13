@@ -1,3 +1,5 @@
+import path from "path";
+
 export function formatTime(sec_num: number) {
   sec_num = Math.round(sec_num);
   var hours: number | string = Math.floor(sec_num / 3600);
@@ -69,4 +71,17 @@ export function formatSize(size: number): string {
 export function formatRes(res: string): string {
   const b = res.split("_");
   return b[1] + "x" + b[2] + "@" + b[3].substring(0, b[3].length - 3) + "FPS";
+}
+export function getAdbPath(dirPath: string) {
+  var adbPath = dirPath;
+  for (let i = 0; i < 100; i++) {
+    if (
+      path.basename(adbPath) == "Contents" ||
+      path.basename(adbPath) == "Water360"
+    )
+      break;
+    adbPath = path.dirname(adbPath);
+  }
+  adbPath = path.join(adbPath, "platform-tools", "adb");
+  return adbPath;
 }

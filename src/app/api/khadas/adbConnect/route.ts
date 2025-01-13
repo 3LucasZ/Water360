@@ -2,7 +2,7 @@ import { isValidIP } from "@/services/mini_helper";
 import { exec } from "child_process";
 import { NextRequest, NextResponse } from "next/server";
 import { promisify } from "util";
-import { getAdbPath } from "../../station/info/route";
+import { getAdbPath } from "@/services/mini_helper";
 
 export async function POST(req: NextRequest) {
   //get IP
