@@ -15,7 +15,7 @@ jobs:
       # install.sh
       - name: install.sh
         shell: bash
-        run: install.sh
+        run: ${GITHUB_WORKSPACE}/install.sh -m
       # install node v20
       - uses: actions/setup-node@master
         with:
@@ -35,7 +35,7 @@ jobs:
       # install.sh
       - name: install.sh
         shell: bash
-        run: install.sh
+        run: ${GITHUB_WORKSPACE}/install.sh -w
       # install node v20
       - uses: actions/setup-node@master
         with:
