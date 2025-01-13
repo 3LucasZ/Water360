@@ -76,8 +76,9 @@ export function getAdbPath(dirPath: string) {
   var adbPath = dirPath;
   for (let i = 0; i < 100; i++) {
     if (
-      path.basename(adbPath) == "Contents" ||
-      path.basename(adbPath) == "Water360"
+      path.basename(adbPath) == "Contents" || // mac production
+      path.basename(adbPath) == "Water360" || // development
+      path.basename(adbPath) == "water360" // windows production
     )
       break;
     adbPath = path.dirname(adbPath);

@@ -13,7 +13,7 @@ jobs:
       # checkout main branch
       - uses: actions/checkout@master
       # install.sh
-      - name: install.sh
+      - name: installer.sh
         shell: bash
         run: ${GITHUB_WORKSPACE}/installer.sh -m
       # install node v20
@@ -33,7 +33,7 @@ jobs:
       # checkout main branch
       - uses: actions/checkout@master
       # install.sh
-      - name: install.sh
+      - name: installer.sh
         shell: bash
         run: ${GITHUB_WORKSPACE}/installer.sh -w
       # install node v20
