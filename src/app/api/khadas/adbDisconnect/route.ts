@@ -5,26 +5,13 @@ import { promisify } from "util";
 import { getAdbPath } from "../../station/info/route";
 
 export async function POST(req: NextRequest) {
-  //get IP
-  var IP = global.IP;
-  if (!isValidIP(IP)) {
-    return NextResponse.json({ msg: "invalid IP" }, { status: 500 });
-  }
-  if (isValidIP(IP, true)) {
-    IP = '"[' + IP + ']"';
-  }
-  //adb connect <IP>
+  //adb disconnect
   const command = promisify(exec);
-  // on development, use the local homebrew adb command.
-  // I don't want to cause problems or messy conflicts.
   const adbPath =
     process.env.NODE_ENV == "development" ? "adb" : getAdbPath(__dirname);
-  const { stdout, stderr } = await command(
-    adbPath + " connect " + IP + ":5555",
-    {
-      timeout: 4000,
-    }
-  );
+  const { stdout, stderr } = await command(adbPath + " disconnect", {
+    timeout: 4000,
+  });
   console.log("stdout:", stdout);
   console.log("stderr:", stderr);
   //return

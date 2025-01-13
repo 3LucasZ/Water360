@@ -6,6 +6,7 @@ export async function POST(request: NextRequest) {
   wake(MAC, function (error) {
     if (error) {
       // handle error
+      return NextResponse.json({ msg: "" + error }, { status: 500 });
     } else {
       // done sending packets
     }

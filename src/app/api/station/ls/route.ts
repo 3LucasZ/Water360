@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { readdir } from "node:fs/promises";
+import path from "path";
 
 export async function POST(request: NextRequest) {
   //readdir
@@ -7,7 +8,7 @@ export async function POST(request: NextRequest) {
     await readdir(global.downloadsDir, { withFileTypes: true })
   )
     .filter((file) => file.isFile())
-    .map((file) => global.downloadsDir + "/" + file.name);
+    .map((file) => path.join(global.downloadsDir, file.name));
   //ret
   return NextResponse.json({ filePaths }, { status: 200 });
 }

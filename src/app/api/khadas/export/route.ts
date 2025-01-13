@@ -6,6 +6,7 @@ import fsPromises from "node:fs/promises";
 import fs from "fs";
 import { write } from "node:fs";
 import { getFileName } from "@/services/file_helper";
+import path from "path";
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,7 +24,7 @@ export async function POST(request: NextRequest) {
     const sync: AdbSync = await adb.sync();
     //export setup
     var writeStream = fs.createWriteStream(
-      global.downloadsDir + "/" + getFileName(filePath),
+      path.join(global.downloadsDir, getFileName(filePath)),
       { flags: "w" }
     );
     global.exporting = true;

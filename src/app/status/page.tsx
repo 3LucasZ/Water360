@@ -16,6 +16,7 @@ import {
 } from "@mantine/core";
 import { RingProgress, SimpleGrid, Center, Group } from "@mantine/core";
 import { IconBolt } from "@tabler/icons-react";
+import { electron } from "process";
 import { MouseEventHandler, useEffect, useState } from "react";
 
 export default function Home() {
@@ -23,6 +24,7 @@ export default function Home() {
   const [adbInstalled, setAdbInstalled] = useState<boolean | undefined>(
     undefined
   );
+  const [info, setInfo] = useState<string>("");
   //khadas status
   const [pingable, setPingable] = useState<boolean | undefined>(undefined);
   const [adbConnected, setAdbConnected] = useState<boolean | undefined>(
@@ -49,6 +51,12 @@ export default function Home() {
     api("/station/adbInstalled").then((res) =>
       res.json().then((json) => setAdbInstalled(json["adbInstalled"]))
     );
+    api("/station/info").then((res) =>
+      res.json().then((json) => {
+        setInfo(JSON.stringify(json, null, 2));
+      })
+    );
+
     //khadas status
     api("/khadas/pingable").then((res) =>
       res.json().then((json) => setPingable(json["pingable"]))
@@ -78,15 +86,23 @@ export default function Home() {
   return (
     <Stack>
       <DeviceCard name="Ground Station">
-        <Center>
-          <Group>
-            <StatusBadge
-              isOn={adbInstalled}
-              onLabel="ADB installed"
-              offLabel="ADB not found"
-            />
-          </Group>
-        </Center>
+        <Stack>
+          <Text>Info: {info}</Text>
+          <Center>
+            <Group>
+              <StatusBadge
+                isOn={adbInstalled}
+                onLabel="ADB installed"
+                offLabel="ADB not found"
+              />
+            </Group>
+          </Center>
+          {/* <CommandButton
+            onClick={getServerSideProps}
+            label="Refresh page"
+            refresh={() => console.log()}
+          /> */}
+        </Stack>
       </DeviceCard>
       <DeviceCard name="Khadas">
         <Center>
@@ -117,7 +133,14 @@ export default function Home() {
               onClick={() => {
                 api("/khadas/adbConnect");
               }}
-              label="Connect"
+              label="ADB Connect"
+              refresh={getServerSideProps}
+            />
+            <CommandButton
+              onClick={() => {
+                api("/khadas/adbDisconnect");
+              }}
+              label="ADB Disconnect"
               refresh={getServerSideProps}
             />
             <CommandButton

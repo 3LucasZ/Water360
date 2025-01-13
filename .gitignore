@@ -38,3 +38,5 @@ next-env.d.ts
 #---CUSTOM---
 user_settings
 dist
+platform-tools.zip
+platform-tools

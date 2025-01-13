@@ -6,17 +6,19 @@ import { join } from "path";
 
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    width: 1500,
+    height: 1000,
     webPreferences: {
       preload: join(__dirname, "preload.js"),
       nodeIntegration: true,
+      // contextIsolation: false,
     },
     title: "Water360",
   });
 
   mainWindow.on("ready-to-show", async () => {
     mainWindow.show();
+    mainWindow.webContents.openDevTools();
   });
 
   const loadURL = async () => {
@@ -62,8 +64,8 @@ const startNextJSServer = async () => {
 
 app.whenReady().then(() => {
   createWindow();
-
   ipcMain.on("ping", () => console.log("pong"));
+  // ipcMain.on("appPath", () => app.getAppPath());
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });

@@ -7,16 +7,18 @@ const start_server_1 = require("next/dist/server/lib/start-server");
 const path_1 = require("path");
 const createWindow = () => {
     const mainWindow = new electron_1.BrowserWindow({
-        width: 900,
-        height: 670,
+        width: 1500,
+        height: 1000,
         webPreferences: {
             preload: (0, path_1.join)(__dirname, "preload.js"),
             nodeIntegration: true,
+            // contextIsolation: false,
         },
         title: "Water360",
     });
     mainWindow.on("ready-to-show", async () => {
         mainWindow.show();
+        mainWindow.webContents.openDevTools();
     });
     const loadURL = async () => {
         if (utils_1.is.dev) {
@@ -60,6 +62,7 @@ const startNextJSServer = async () => {
 electron_1.app.whenReady().then(() => {
     createWindow();
     electron_1.ipcMain.on("ping", () => console.log("pong"));
+    // ipcMain.on("appPath", () => app.getAppPath());
     electron_1.app.on("activate", () => {
         if (electron_1.BrowserWindow.getAllWindows().length === 0)
             createWindow();
