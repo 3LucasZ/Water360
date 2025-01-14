@@ -6,7 +6,6 @@ on:
       - v**
 # parallel mac (TBD) and windows builder
 jobs:
-  # run windows VM
   build_on_mac:
     runs-on: macos-latest
     steps:
@@ -26,7 +25,6 @@ jobs:
       - run: npm run release-macos
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  # run windows VM
   build_on_win:
     runs-on: windows-latest
     steps:

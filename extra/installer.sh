@@ -15,6 +15,7 @@ if [[ "$1" == "-m" ]]; then
   unzip -o $BASEDIR/platform-tools.zip -d $BASEDIR
 elif [[ "$1" == "-w" ]]; then
   LINK="https://dl.google.com/android/repository/platform-tools-latest-windows.zip"
+  export MSYS_NO_PATHCONV=1
   curl -SL $LINK -o $BASEDIR\\platform-tools.zip
   unzip -o $BASEDIR\\platform-tools.zip -d $BASEDIR
 fi
@@ -38,6 +39,7 @@ if [[ "$EXT" == "gz" ]]; then
   tar -xvzf $BASEDIR/scrcpy.zip -C $BASEDIR/scrcpy
   mv $BASEDIR/scrcpy/*/* $BASEDIR/scrcpy
 else
+  export MSYS_NO_PATHCONV=1
   curl -SL $LINK -o $BASEDIR\\scrcpy.zip
   mkdir $BASEDIR\\scrcpy
   unzip -o $BASEDIR\\scrcpy.zip -d $BASEDIR\\scrcpy
