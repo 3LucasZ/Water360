@@ -4,14 +4,19 @@ BASEDIR=$(dirname $0)
 echo "Script location: ${BASEDIR}"
 echo "Flag: $1"
 
+
+
 if [[ "$1" == "-m" ]]; then
   LINK="https://dl.google.com/android/repository/platform-tools-latest-darwin.zip"
+  curl -SL $LINK -o $BASEDIR/platform-tools.zip
+  unzip -o $BASEDIR/platform-tools.zip -d $BASEDIR
 elif [[ "$1" == "-w" ]]; then
   LINK="https://dl.google.com/android/repository/platform-tools-latest-windows.zip"
+  curl -SL $LINK -o $BASEDIR\\platform-tools.zip
+  unzip -o $BASEDIR\\platform-tools.zip -d $BASEDIR
 fi
-echo "Link: $LINK"
-curl -SL "$LINK" -o "$BASEDIR/platform-tools.zip"
-unzip -o "$BASEDIR/platform-tools.zip" -d "$BASEDIR"
+
+
 
 if [[ "$1" == "-m" ]]; then
   LINK="https://github.com/Genymobile/scrcpy/releases/download/v3.1/scrcpy-macos-aarch64-v3.1.tar.gz"
@@ -22,13 +27,15 @@ elif [[ "$1" == "-w" ]]; then
 elif [[ "$1" == "-w32" ]]; then
   LINK="https://github.com/Genymobile/scrcpy/releases/download/v3.1/scrcpy-win32-v3.1.zip"
 fi
-echo "Link: $LINK"
-curl -SL "$LINK" -o "$BASEDIR/scrcpy.zip"
 EXT="${LINK##*.}"
-mkdir "$BASEDIR/scrcpy"
 if [[ "$EXT" == "zip" ]]; then
-  unzip -o "$BASEDIR/scrcpy.zip" -d "$BASEDIR/scrcpy"
+  curl -SL $LINK -o $BASEDIR/scrcpy.zip
+  mkdir $BASEDIR/scrcpy
+  unzip -o $BASEDIR/scrcpy.zip -d $BASEDIR/scrcpy
+  mv $BASEDIR/scrcpy/*/* $BASEDIR/scrcpy
 else
-  tar -xvzf "$BASEDIR/scrcpy.zip" -C "$BASEDIR/scrcpy"
+  curl -SL $LINK -o $BASEDIR\\scrcpy.zip
+  mkdir $BASEDIR\\scrcpy
+  tar -xvzf $BASEDIR\\scrcpy.zip -C $BASEDIR\\scrcpy
+  mv $BASEDIR\\scrcpy\\*\\* $BASEDIR\\scrcpy
 fi
-mv $BASEDIR/scrcpy/*/* $BASEDIR/scrcpy
