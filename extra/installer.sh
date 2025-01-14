@@ -32,11 +32,11 @@ echo $EXT
 if [[ "$EXT" == "gz" ]]; then
   curl -SL $LINK -o $BASEDIR/scrcpy.zip
   mkdir $BASEDIR/scrcpy
-  unzip -o $BASEDIR/scrcpy.zip -d $BASEDIR/scrcpy
+  tar -xvzf $BASEDIR/scrcpy.zip -C $BASEDIR/scrcpy
   mv $BASEDIR/scrcpy/*/* $BASEDIR/scrcpy
 else
   curl -SL $LINK -o $BASEDIR\\scrcpy.zip
   mkdir $BASEDIR\\scrcpy
-  tar -xvzf $BASEDIR\\scrcpy.zip -C $BASEDIR\\scrcpy
+  unzip -o $BASEDIR\\scrcpy.zip -d $BASEDIR\\scrcpy
   mv $BASEDIR\\scrcpy\\*\\* $BASEDIR\\scrcpy
 fi
