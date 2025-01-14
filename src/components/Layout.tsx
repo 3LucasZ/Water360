@@ -105,9 +105,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <Group h="100%" px="md">
           <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
           <Image src={"logo.png"} width={30} height={30} alt={""} priority />
-          <Title order={2} c="blue">
-            Water360
-          </Title>
+          <Flex align="center" gap={8}>
+            <Title order={2} c="blue">
+              Water360
+              {/* v{process.env.version} */}
+            </Title>
+            <Text>v{process.env.version}</Text>
+          </Flex>
           <Group justify="end" flex={1}>
             <Tooltip
               pb={11}
