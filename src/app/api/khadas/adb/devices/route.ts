@@ -2,7 +2,7 @@ import { isValidIP } from "@/services/mini_helper";
 import { exec } from "child_process";
 import { NextRequest, NextResponse } from "next/server";
 import { promisify } from "util";
-import { getAdbPath } from "@/services/mini_helper";
+import { getAdbPath } from "@/services/path_helper";
 
 export async function POST(req: NextRequest) {
   const suffix = "devices";

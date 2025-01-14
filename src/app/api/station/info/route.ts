@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import commandExists from "command-exists";
 import { ipcRenderer } from "electron";
-import { getAdbPath } from "@/services/mini_helper";
+import { getAdbPath } from "@/services/path_helper";
 
 export async function POST(request: NextRequest) {
   const processPath = process.cwd();

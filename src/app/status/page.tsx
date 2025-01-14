@@ -22,9 +22,8 @@ import { StatusBadge } from "./StatusBadge";
 
 export default function Home() {
   //station status
-  const [adbInstalled, setAdbInstalled] = useState<boolean | undefined>(
-    undefined
-  );
+  const [adbInstalled, setAdbInstalled] = useState<boolean>(false);
+  const [scrcpyInstalled, setScrcpyInstalled] = useState<boolean>(false);
   // logs
   const [stdout, setStdout] = useState("");
   const [stderr, setStderr] = useState("");
@@ -53,7 +52,10 @@ export default function Home() {
   function getServerSideProps() {
     //station status
     api("/station/adbInstalled").then((res) =>
-      res.json().then((json) => setAdbInstalled(json["adbInstalled"]))
+      res.json().then((json) => {
+        setAdbInstalled(json["adbInstalled"]);
+        setScrcpyInstalled(json["scrcpyInstalled"]);
+      })
     );
     api("/station/logs").then((res) =>
       res.json().then((json) => {
@@ -99,6 +101,11 @@ export default function Home() {
                 onLabel="ADB installed"
                 offLabel="ADB not found"
               />
+              <StatusBadge
+                isOn={scrcpyInstalled}
+                onLabel="scrcpy installed"
+                offLabel="scrcpy not found"
+              />
             </Group>
           </Center>
           <SimpleGrid cols={3}>
@@ -134,6 +141,13 @@ export default function Home() {
                   await api("/khadas/adb/connect");
                 }}
                 label="ADB Connect"
+                refresh={getServerSideProps}
+              />
+              <CommandButton
+                onClick={async () => {
+                  await api("/khadas/adb/scrcpy");
+                }}
+                label="scrcpy"
                 refresh={getServerSideProps}
               />
               <CommandButton
