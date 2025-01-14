@@ -1,6 +1,9 @@
 #!/bin/bash
 echo "Script executed from: ${PWD}"
 BASEDIR=$(dirname $0)
+if [[ "$1" == "-w" ]]; then
+  BASEDIR="${BASEDIR//\\//}"
+fi
 echo "Script location: ${BASEDIR}"
 echo "Flag: $1"
 
