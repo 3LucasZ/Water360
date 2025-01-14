@@ -25,10 +25,10 @@ fi
 echo "Link: $LINK"
 curl -SL "$LINK" -o "$BASEDIR/scrcpy.zip"
 EXT="${LINK##*.}"
+mkdir "$BASEDIR/scrcpy"
 if [[ "$EXT" == "zip" ]]; then
-  unzip -o "$BASEDIR/scrcpy.zip" -d
+  unzip -o "$BASEDIR/scrcpy.zip" -d "$BASEDIR/scrcpy"
 else
-  mkdir "$BASEDIR/scrcpy"
   tar -xvzf "$BASEDIR/scrcpy.zip" -C "$BASEDIR/scrcpy"
-  mv $BASEDIR/scrcpy/*/* $BASEDIR/scrcpy
 fi
+mv $BASEDIR/scrcpy/*/* $BASEDIR/scrcpy
