@@ -28,7 +28,8 @@ elif [[ "$1" == "-w32" ]]; then
   LINK="https://github.com/Genymobile/scrcpy/releases/download/v3.1/scrcpy-win32-v3.1.zip"
 fi
 EXT="${LINK##*.}"
-if [[ "$EXT" == "zip" ]]; then
+echo $EXT
+if [[ "$EXT" == "gz" ]]; then
   curl -SL $LINK -o $BASEDIR/scrcpy.zip
   mkdir $BASEDIR/scrcpy
   unzip -o $BASEDIR/scrcpy.zip -d $BASEDIR/scrcpy
