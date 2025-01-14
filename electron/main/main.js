@@ -18,7 +18,7 @@ const createWindow = () => {
     });
     mainWindow.on("ready-to-show", async () => {
         mainWindow.show();
-        mainWindow.webContents.openDevTools();
+        // mainWindow.webContents.openDevTools();
     });
     const loadURL = async () => {
         if (utils_1.is.dev) {

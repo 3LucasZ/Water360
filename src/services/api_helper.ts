@@ -4,11 +4,16 @@ import { NextResponse } from "next/server";
 export async function under360(
   route: string,
   body?: any,
-  disableNotification?: boolean
+  disableNotification?: boolean,
+  log?: boolean
 ) {
   const newRoute = "/under360" + route;
   try {
-    return await api(newRoute, body, route.includes("inspect"));
+    return await api(
+      newRoute,
+      { ...body, log: log ? log : false },
+      route.includes("inspect")
+    );
   } catch (e) {
     if (!disableNotification) {
       notifications.show({

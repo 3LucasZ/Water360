@@ -10,6 +10,8 @@ import {
   Tooltip,
   Select,
   Space,
+  SimpleGrid,
+  Text,
 } from "@mantine/core";
 import {
   IconBrandYoutube,
@@ -36,15 +38,53 @@ import ExposureMode from "./Settings/ExposureMode";
 import ExposureEV from "./Settings/ExposureEV";
 import ShutterMode from "./Settings/ShutterMode";
 import GammaMode from "./Settings/GammaMode";
+import { CommandButton } from "../status/CommandButton";
+import { update } from "three/examples/jsm/libs/tween.module.js";
 
 export default function Home() {
+  // logging
+  const [stdout, setStdout] = useState("");
+  const [stderr, setStderr] = useState("");
+  function updateLogs() {
+    api("/station/logs").then((res) =>
+      res.json().then((json) => {
+        setStdout(json["stdout"]);
+        setStderr(json["stderr"]);
+      })
+    );
+  }
+  const logUI = (
+    <SimpleGrid cols={2}>
+      <Stack>
+        <CommandButton
+          label={"Operation Status"}
+          onClick={async () => {
+            await under360("/status/operation", undefined, undefined, true);
+          }}
+          refresh={() => updateLogs()}
+        />
+      </Stack>
+      <Stack>
+        {/* <Text>Stdout</Text> */}
+        {/* <Text>Logs</Text> */}
+        <Text style={{ wordBreak: "break-all", whiteSpace: "pre" }}>
+          {stdout}
+        </Text>
+      </Stack>
+      {/* <Stack>
+    <Text>Stderr</Text>
+    <Text style={{ wordBreak: "break-all" }}>{stderr}</Text>
+  </Stack> */}
+    </SimpleGrid>
+  );
+  // state
   const [mode, setMode] = useState("Photo");
   const [isPreviewing, setIsPreviewing] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const [previewData, setPreviewData] = useState("");
   const [previewStamp, setPreviewStamp] = useState(0);
   const [ws, setWs] = useState<WebSocket | undefined>(undefined);
-
+  //websocket
   useEffect(() => {
     staticInit();
     function beforeUnload(e: BeforeUnloadEvent) {
@@ -53,11 +93,10 @@ export default function Home() {
       ws?.close();
       under360("/command/stopPreviewNormal");
     }
-
     window.addEventListener("beforeunload", beforeUnload);
-
     return () => {
       window.removeEventListener("beforeunload", beforeUnload);
+      // if (ws?.readyState !== 3) ws?.close();
     };
   }, []);
   async function staticInit() {
@@ -90,7 +129,7 @@ export default function Home() {
   }
 
   const previewButton = (
-    <Tooltip label={previewStamp % 10000}>
+    <Tooltip label={ws?.url + " " + (previewStamp % 10000)}>
       <ActionIcon
         color="blue"
         onClick={async () => {
@@ -168,6 +207,7 @@ export default function Home() {
         <ShutterMode />
         <GammaMode />
         <Space />
+        {logUI}
       </Stack>
     </Center>
   );

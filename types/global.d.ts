@@ -11,4 +11,7 @@ declare global {
   var exporting: boolean = true;
   var exportSoFar: number = 0;
   var exportTotal: number = 0;
+
+  var stdout: string = "";
+  var stderr: string = "";
 }

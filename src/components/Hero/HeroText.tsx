@@ -1,6 +1,7 @@
-import { Title, Text, Button, Container } from '@mantine/core';
-import { Dots } from './Dots';
-import classes from './HeroText.module.css';
+import { Title, Text, Button, Container } from "@mantine/core";
+import { Dots } from "./Dots";
+import classes from "./HeroText.module.css";
+import Link from "next/link";
 
 export function HeroText() {
   return (
@@ -12,24 +13,37 @@ export function HeroText() {
 
       <div className={classes.inner}>
         <Title className={classes.title}>
-          Seamless {' '}
+          Seamless{" "}
           <Text component="span" className={classes.highlight} inherit>
             360 Camera
-          </Text>{' '}
+          </Text>{" "}
           Remote Control
         </Title>
 
         <Container p={0} size={600}>
           <Text size="lg" c="dimmed" className={classes.description}>
-            Take beautiful, high quality 360 images and video whether its under the ocean or across the world.
+            Take beautiful, high quality 360 images and video whether its under
+            the ocean or across the world.
           </Text>
         </Container>
 
         <div className={classes.controls}>
-          <Button className={classes.control} size="lg" variant="default" color="gray" >
+          <Button
+            className={classes.control}
+            size="lg"
+            variant="default"
+            color="gray"
+            component={Link}
+            href={"/settings"}
+          >
             Setup
           </Button>
-          <Button className={classes.control} size="lg">
+          <Button
+            className={classes.control}
+            size="lg"
+            component={Link}
+            href={"/status"}
+          >
             Get started
           </Button>
         </div>

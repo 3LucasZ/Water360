@@ -4,27 +4,30 @@ import MemoryDisplay from "@/components/MemoryDisplay";
 import { api, under360 } from "@/services/api_helper";
 import { formatSizePair } from "@/services/mini_helper";
 import {
-  Badge,
   Stack,
   Title,
   Text,
   Paper,
-  Button,
   Progress,
   Box,
   Overlay,
 } from "@mantine/core";
 import { RingProgress, SimpleGrid, Center, Group } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import { IconBolt } from "@tabler/icons-react";
 import { electron } from "process";
 import { MouseEventHandler, useEffect, useState } from "react";
+import { CommandButton } from "./CommandButton";
+import { StatusBadge } from "./StatusBadge";
 
 export default function Home() {
   //station status
   const [adbInstalled, setAdbInstalled] = useState<boolean | undefined>(
     undefined
   );
-  const [info, setInfo] = useState<string>("");
+  // logs
+  const [stdout, setStdout] = useState("");
+  const [stderr, setStderr] = useState("");
   //khadas status
   const [pingable, setPingable] = useState<boolean | undefined>(undefined);
   const [adbConnected, setAdbConnected] = useState<boolean | undefined>(
@@ -45,15 +48,17 @@ export default function Home() {
     cameraVersion: "",
     cameraSerial: "",
   });
+
   //initial data fetch
   function getServerSideProps() {
     //station status
     api("/station/adbInstalled").then((res) =>
       res.json().then((json) => setAdbInstalled(json["adbInstalled"]))
     );
-    api("/station/info").then((res) =>
+    api("/station/logs").then((res) =>
       res.json().then((json) => {
-        setInfo(JSON.stringify(json, null, 2));
+        setStdout(json["stdout"]);
+        setStderr(json["stderr"]);
       })
     );
 
@@ -87,7 +92,6 @@ export default function Home() {
     <Stack>
       <DeviceCard name="Ground Station">
         <Stack>
-          <Text>Info: {info}</Text>
           <Center>
             <Group>
               <StatusBadge
@@ -97,11 +101,62 @@ export default function Home() {
               />
             </Group>
           </Center>
-          {/* <CommandButton
+          <SimpleGrid cols={3}>
+            <Stack>
+              {/* <CommandButton
             onClick={getServerSideProps}
             label="Refresh page"
             refresh={() => console.log()}
           /> */}
+              <CommandButton
+                onClick={async () => {
+                  api("/station/info");
+                }}
+                label="Info"
+                refresh={getServerSideProps}
+              />
+              <CommandButton
+                onClick={async () => {
+                  api("/khadas/adb/kill-server");
+                }}
+                label="ADB Kill Server"
+                refresh={getServerSideProps}
+              />
+              <CommandButton
+                onClick={async () => {
+                  await api("/khadas/adb/devices");
+                }}
+                label="ADB Devices"
+                refresh={getServerSideProps}
+              />
+              <CommandButton
+                onClick={async () => {
+                  await api("/khadas/adb/connect");
+                }}
+                label="ADB Connect"
+                refresh={getServerSideProps}
+              />
+              <CommandButton
+                onClick={async () => {
+                  await api("/khadas/adb/disconnect");
+                }}
+                label="ADB Disconnect"
+                refresh={getServerSideProps}
+              />
+            </Stack>
+            <Box>
+              <Stack gap={0}>
+                <Text>Stdout:</Text>
+                <Text style={{ wordWrap: "break-word" }}>{stdout}</Text>
+              </Stack>
+            </Box>
+            <Box>
+              <Stack gap={0}>
+                <Text>Stderr:</Text>
+                <Text style={{ wordWrap: "break-word" }}>{stderr}</Text>
+              </Stack>
+            </Box>
+          </SimpleGrid>
         </Stack>
       </DeviceCard>
       <DeviceCard name="Khadas">
@@ -114,38 +169,28 @@ export default function Home() {
             />
             <StatusBadge
               isOn={adbConnected}
-              onLabel="connected"
-              offLabel="disconnected"
+              onLabel="ADB Connected"
+              offLabel="ADB Disconnected"
             />
-            <StatusBadge isOn={isAppRun} onLabel="app on" offLabel="app off" />
+            <StatusBadge
+              isOn={isAppRun}
+              onLabel="app running"
+              offLabel="app stopped"
+            />
           </Group>
         </Center>
         <SimpleGrid cols={2}>
           <Stack>
             <CommandButton
-              onClick={() => {
-                api("/khadas/wol");
+              onClick={async () => {
+                await api("/khadas/wol");
               }}
-              label="Wake"
+              label="Wake On Lan"
               refresh={getServerSideProps}
             />
             <CommandButton
-              onClick={() => {
-                api("/khadas/adbConnect");
-              }}
-              label="ADB Connect"
-              refresh={getServerSideProps}
-            />
-            <CommandButton
-              onClick={() => {
-                api("/khadas/adbDisconnect");
-              }}
-              label="ADB Disconnect"
-              refresh={getServerSideProps}
-            />
-            <CommandButton
-              onClick={() => {
-                api("/khadas/runApp");
+              onClick={async () => {
+                await api("/khadas/runApp");
               }}
               label="Run App"
               refresh={getServerSideProps}
@@ -198,22 +243,22 @@ export default function Home() {
         <SimpleGrid cols={2}>
           <Stack>
             <CommandButton
-              onClick={() => {
-                under360("/command/connect");
+              onClick={async () => {
+                await under360("/command/connect");
               }}
               label="Connect"
               refresh={getServerSideProps}
             />
             <CommandButton
-              onClick={() => {
-                under360("/command/disconnect");
+              onClick={async () => {
+                await under360("/command/disconnect");
               }}
               label="Disconnect"
               refresh={getServerSideProps}
             />
             <CommandButton
-              onClick={() => {
-                under360("/command/init");
+              onClick={async () => {
+                await under360("/command/init");
               }}
               label="First-time setup"
               refresh={() => null}
@@ -245,43 +290,5 @@ function DeviceCard({
         {children}
       </Stack>
     </Paper>
-  );
-}
-function CommandButton({
-  label,
-  onClick,
-  refresh,
-}: {
-  label: string;
-  onClick: MouseEventHandler<HTMLButtonElement>;
-  refresh: Function;
-}) {
-  return (
-    <Button
-      radius={"xl"}
-      onClick={(e) => {
-        onClick(e);
-        setTimeout(refresh, 1000);
-      }}
-      maw={300}
-    >
-      {/* <Text size="lg">{label}</Text> */}
-      {label}
-    </Button>
-  );
-}
-function StatusBadge({
-  isOn,
-  onLabel,
-  offLabel,
-}: {
-  isOn: boolean | undefined;
-  onLabel: string;
-  offLabel: string;
-}) {
-  return (
-    <Badge color={isOn ? "green" : "red"} hidden={isOn === undefined} size="lg">
-      {isOn ? onLabel : offLabel}
-    </Badge>
   );
 }

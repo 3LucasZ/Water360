@@ -6,10 +6,14 @@ export async function POST(request: NextRequest) {
   //get data
   const filePath = (await request.json())["url"];
   //setup adb
-  const connector: AdbServerNodeTcpConnector = new AdbServerNodeTcpConnector({
-    host: "localhost",
-    port: 5037,
-  });
+  try {
+    var connector: AdbServerNodeTcpConnector = new AdbServerNodeTcpConnector({
+      host: "localhost",
+      port: 5037,
+    });
+  } catch (e) {
+    return NextResponse.json({ err: e }, { status: 500 });
+  }
   const client: AdbServerClient = new AdbServerClient(connector);
   const selector: AdbServerClient.DeviceSelector = undefined;
   const transport: AdbTransport = await client.createTransport(selector);

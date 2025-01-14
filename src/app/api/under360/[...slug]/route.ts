@@ -9,10 +9,11 @@ export async function POST(
   var proxyRoute = "/" + params.slug.join("/");
   //convert body to params
   try {
-    const queryParamsRaw = await request.json();
+    var queryParamsRaw = await request.json();
     if (queryParamsRaw) {
       proxyRoute += "?" + new URLSearchParams(queryParamsRaw).toString();
     }
+    console.log(queryParamsRaw);
   } catch (e) {}
   //get IP
   var IP = global.IP;
@@ -41,9 +42,18 @@ export async function POST(
       signal: AbortSignal.timeout(timeout),
     });
     //return
-    return res;
+    const ret = await res.json();
+    if (queryParamsRaw["log"]) {
+      global.stdout = JSON.stringify(ret, null, 2);
+      global.stderr = "";
+    }
+    return NextResponse.json(ret, { status: res.status });
   } catch (e) {
     //catch timeout error
+    if (queryParamsRaw["log"]) {
+      global.stdout = "Request timeout";
+      global.stderr = "";
+    }
     return NextResponse.json({ err: "Request timeout" }, { status: 504 });
   }
 }

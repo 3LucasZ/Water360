@@ -10,8 +10,11 @@ export async function POST(request: NextRequest) {
   // const appPath = ipcRenderer.send("appPath");
   var adbPath = getAdbPath(dirPath);
   var env = process.env.NODE_ENV;
-  return NextResponse.json(
+  global.stdout = JSON.stringify(
     { processPath, dirPath, adbPath, env },
-    { status: 200 }
+    null,
+    2
   );
+  global.stderr = "";
+  return NextResponse.json({}, { status: 200 });
 }
