@@ -1,6 +1,6 @@
 {
   "name": "water360",
-  "version": "0.3.9",
+  "version": "0.3.10",
   "private": true,
   "main": "electron/main/main.js",
   "author": "3LucasZ <lucas.j.zheng@gmail.com>",

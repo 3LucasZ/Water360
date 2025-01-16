@@ -30,11 +30,8 @@ export default function SimpleFileCard({
   return (
     <Card radius="md" withBorder>
       <Stack>
-        <Text
-          fw={500}
-          // truncate="end"
-        >
-          {fileName.replaceAll("_", " ")}
+        <Text fw={500} style={{ wordBreak: "break-all" }}>
+          {fileName}
         </Text>
         <Group>
           <Badge
