@@ -57,9 +57,16 @@ export default function Home() {
     <SimpleGrid cols={2}>
       <Stack>
         <CommandButton
-          label={"Operation Status"}
+          label={"/status/operation"}
           onClick={async () => {
             await under360("/status/operation", undefined, undefined, true);
+          }}
+          refresh={() => updateLogs()}
+        />
+        <CommandButton
+          label={"/get/all"}
+          onClick={async () => {
+            await under360("/get/all", undefined, undefined, true);
           }}
           refresh={() => updateLogs()}
         />

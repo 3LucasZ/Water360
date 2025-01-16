@@ -60,15 +60,12 @@ export default function Home() {
   }
   // console.log(filePaths);
   const cards = filePaths.map((url) => {
-    // const fileName = url.substring(url.lastIndexOf("/") + 1);
-    const fileName = url;
     const fileSuffix = url.split(".").pop();
     const fileType = fileSuffix == "jpg" ? FileType.IMAGE : FileType.VIDEO;
     return (
       <SimpleFileCard
         key={url}
         filePath={url}
-        fileName={fileName}
         fileType={fileType}
         setTar={setTarUrl}
         refresh={getServerSideProps}

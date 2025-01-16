@@ -22,7 +22,7 @@ export default function LivestreamFooter({
       <Button
         radius={"xl"}
         size="lg"
-        w={300}
+        w={350}
         onClick={async () => {
           if (isLivestreaming) {
             setIsLoading(true);

@@ -18,87 +18,12 @@
 
 ## Welcome!
 
-Water360 is a desktop application available for Mac and Windows to connect to the Under360 server. It enables the remote control of the Insta360 camera.
+Water360 is a desktop application available for Mac and Windows to connect to the Under360 server (https://github.com/3LucasZ/Under360). It enables the remote control of the Insta360 camera.
 
 ## Usage
 
-1. Find the latest release [here](https://github.com/3LucasZ/Water360/releases). Install the app on your computer.
-2. Update the IP address of your controller on the user settings page.
-3. Install adb.
-4. Enjoy!
-
-### Installing ADB
-
-1. [Windows](https://medium.com/@yadav-ajay/a-step-by-step-guide-to-setting-up-adb-path-on-windows-0b833faebf18)
-2. [Mac](https://stackoverflow.com/questions/31374085/installing-adb-on-macos)
-
-### Khadas unreachable
-
-- Check what devices are reachable on your network. Then,
-- Unplug and plug back in Ethernet OR
-- Power cycle
-
-### Debugging
-
-1. Check that the water360 server is running.
-
-- Run: lsof -nP -i6TCP | grep LISTEN | grep water
-- You should see: water360 ... 30011 (LISTEN)
-
-## Developing
-
-### Build
-
-1. Fork repo and use the GH actions already setup to automatically build the app for Windows and Mac.
-
-### Dev environment
-
-1. Run: npm run dev
-
-- This starts a NextJS server and an Electron webview in parallel
-- Hot reload and debugging tools available
-
-2. Explore tooling. Ex:
-
-- npm run -- env electron-builder --help
-- npm run -- env electron-builder --win --x64
-
-### Debugging
-
-1. Check node: lsof -nP -i4TCP | grep LISTEN | grep node
-2. Run inspect element on the app.
-3. Check that adb is running on port 5037.
-
-- Run: adb devices
-- If adb is running you should see an output
-- Run: lsof -nP -i4TCP | grep LISTEN | grep adb
-- You should see: adb ... 5037 (LISTEN)
-- adb MUST be running on port 5037
-
-4. Try catch
-
-- Since there is no console.log on main process, wrap everything with try catch, and return it w/ the error code.
-
-5. Do not try (or at least try to avoid) features marked experimental. Experimental features (like instrumentation hook) are bound to not work / crash
-
-### Directories
-
-Local
-
-- /Applications
-- /Users/lucaszheng/Library/Application Support/water360
-
-Khadas
-
-- /storage/emulated/0/Android/data/com.example.kotlininsta360demo/cache
-
-### Error codes
-
-- 200: All good!
-- 500: Internal server error (generic)
-  - Notification pop-ups
-- 504: Gateway Timeout (server acting as a proxy to Khadas did not receive a timely response)
-  - No notification pop-ups
+1. Find the latest release [here](https://github.com/3LucasZ/Water360/releases).
+2. Install the app on your computer.
 
 ### Default settings
 

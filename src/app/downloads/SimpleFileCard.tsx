@@ -3,22 +3,22 @@ import { FileType } from "@/services/FileType";
 import { formatSize } from "@/services/mini_helper";
 import { Card, Stack, Badge, ActionIcon, Text, Group } from "@mantine/core";
 import { IconTrash, IconEye } from "@tabler/icons-react";
+import path from "path";
 import { useState, useEffect } from "react";
 
 export default function SimpleFileCard({
   filePath,
-  fileName,
   fileType,
   setTar,
   refresh,
 }: {
   filePath: string;
-  fileName: string;
   fileType: FileType;
   setTar: Function;
   refresh: Function;
 }) {
   const [fileSize, setFileSize] = useState(0);
+  const fileName = path.basename(filePath);
   function getServerSideProps() {
     api("/station/inspect", { url: filePath }).then((res) =>
       res.json().then((json) => setFileSize(json["fileSize"]))
@@ -31,7 +31,7 @@ export default function SimpleFileCard({
     <Card radius="md" withBorder>
       <Stack>
         <Text fw={500} style={{ wordBreak: "break-all" }}>
-          {fileName}
+          {filePath}
         </Text>
         <Group>
           <Badge
@@ -52,7 +52,7 @@ export default function SimpleFileCard({
           <Text>Size: {formatSize(fileSize)}</Text>
         </Group>
         <Group justify="space-between">
-          <ActionIcon
+          {/* <ActionIcon
             color={"red"}
             variant="filled"
             size="md"
@@ -62,12 +62,12 @@ export default function SimpleFileCard({
             }}
           >
             <IconTrash stroke={1.5} />
-          </ActionIcon>
+          </ActionIcon> */}
           <ActionIcon
             variant="default"
             size="md"
             onClick={() => {
-              setTar("/api/station/asset" + filePath);
+              setTar("/api/station/asset/" + fileName);
             }}
           >
             <IconEye stroke={1.5} />

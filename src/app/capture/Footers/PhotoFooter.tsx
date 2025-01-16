@@ -37,7 +37,7 @@ export default function PhotoFooter({
         ) : (
           <Button.Group>
             <Button
-              w="150"
+              w={250}
               radius={"xl"}
               size="lg"
               color="blue"
@@ -53,7 +53,7 @@ export default function PhotoFooter({
               Capture
             </Button>
             <Button
-              w="150"
+              w={100}
               radius={"xl"}
               size="lg"
               color="cyan"
