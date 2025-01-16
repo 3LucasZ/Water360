@@ -19,6 +19,7 @@ export default function SimpleFileCard({
 }) {
   const [fileSize, setFileSize] = useState(0);
   const fileName = path.basename(filePath);
+  console.log("filePath", filePath, "fileName", fileName);
   function getServerSideProps() {
     api("/station/inspect", { url: filePath }).then((res) =>
       res.json().then((json) => setFileSize(json["fileSize"]))

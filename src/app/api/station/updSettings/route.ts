@@ -1,16 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { writeFileSync } from "node:fs";
+import path from "node:path";
 
 export async function POST(request: NextRequest) {
   //get data
   const data = await request.json();
   //save settings
   try {
-    writeFileSync(settingsDir + "/IP.txt", data["IP"]);
+    writeFileSync(path.join(settingsDir, "IP.txt"), data["IP"]);
     global.IP = data["IP"];
-    writeFileSync(settingsDir + "/MAC.txt", data["MAC"]);
+    writeFileSync(path.join(settingsDir, "MAC.txt"), data["MAC"]);
     global.MAC = data["MAC"];
-    writeFileSync(settingsDir + "/RTMP.txt", data["RTMP"]);
+    writeFileSync(path.join(settingsDir, "RTMP.txt"), data["RTMP"]);
     global.RTMP = data["RTMP"];
   } catch (e) {
     if (e instanceof Error) {
