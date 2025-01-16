@@ -1,23 +1,16 @@
 #!/bin/bash
 echo "Script executed from: ${PWD}"
-if [[ "$1" == "-w" ]]; then
-  export MSYS_NO_PATHCONV=1
-fi
-BASEDIR=$(dirname $0)
-echo "Script location: ${BASEDIR}"
 echo "Flag: $1"
 
 
 
 if [[ "$1" == "-m" ]]; then
   LINK="https://dl.google.com/android/repository/platform-tools-latest-darwin.zip"
-  curl -SL $LINK -o $BASEDIR/platform-tools.zip
-  unzip -o $BASEDIR/platform-tools.zip -d $BASEDIR
 elif [[ "$1" == "-w" ]]; then
   LINK="https://dl.google.com/android/repository/platform-tools-latest-windows.zip"
-  curl -SL $LINK -o $BASEDIR\\platform-tools.zip
-  unzip -o $BASEDIR\\platform-tools.zip -d $BASEDIR
 fi
+curl -SL $LINK -o extra/platform-tools.zip
+unzip -o extra/platform-tools.zip -d extra
 
 
 
@@ -32,14 +25,11 @@ elif [[ "$1" == "-w32" ]]; then
 fi
 EXT="${LINK##*.}"
 echo $EXT
+mkdir extra/scrcpy
+curl -SL $LINK -o extra/scrcpy.zip
 if [[ "$EXT" == "gz" ]]; then
-  curl -SL $LINK -o $BASEDIR/scrcpy.zip
-  mkdir $BASEDIR/scrcpy
-  tar -xvzf $BASEDIR/scrcpy.zip -C $BASEDIR/scrcpy
-  mv $BASEDIR/scrcpy/*/* $BASEDIR/scrcpy
+  tar -xvzf extra/scrcpy.zip -C extra/scrcpy
 else
-  curl -SL $LINK -o $BASEDIR\\scrcpy.zip
-  mkdir $BASEDIR\\scrcpy
-  unzip -o $BASEDIR\\scrcpy.zip -d $BASEDIR\\scrcpy
-  mv $BASEDIR\\scrcpy\\*\\* $BASEDIR\\scrcpy
+  unzip -o extra/scrcpy.zip -d extra/scrcpy
 fi
+mv extra/scrcpy/*/* extra/scrcpy
