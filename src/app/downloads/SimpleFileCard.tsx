@@ -7,21 +7,20 @@ import path from "path";
 import { useState, useEffect } from "react";
 
 export default function SimpleFileCard({
-  filePath,
+  fileName,
   fileType,
   setTar,
   refresh,
 }: {
-  filePath: string;
+  fileName: string;
   fileType: FileType;
   setTar: Function;
   refresh: Function;
 }) {
   const [fileSize, setFileSize] = useState(0);
-  const fileName = path.basename(filePath);
-  console.log("filePath", filePath, "fileName", fileName);
+
   function getServerSideProps() {
-    api("/station/inspect", { url: filePath }).then((res) =>
+    api("/station/inspect", { fileName }).then((res) =>
       res.json().then((json) => setFileSize(json["fileSize"]))
     );
   }
@@ -32,7 +31,7 @@ export default function SimpleFileCard({
     <Card radius="md" withBorder>
       <Stack>
         <Text fw={500} style={{ wordBreak: "break-all" }}>
-          {filePath}
+          {fileName}
         </Text>
         <Group>
           <Badge

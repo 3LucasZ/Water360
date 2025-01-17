@@ -37,7 +37,7 @@ import { useEffect, useState } from "react";
 import SimpleFileCard from "./SimpleFileCard";
 
 export default function Home() {
-  const [filePaths, setFilePaths] = useState<string[]>([]);
+  const [fileNames, setFileNames] = useState<string[]>([]);
   const [tarUrl, setTarUrl] = useState("");
   const tarUrlSuffix = tarUrl.split(".").pop();
   useEffect(() => {
@@ -46,8 +46,9 @@ export default function Home() {
   function getServerSideProps() {
     api("/station/ls").then((res) =>
       res.json().then((json) => {
-        setFilePaths(
-          json["filePaths"]
+        console.log(json["fileNames"]);
+        setFileNames(
+          json["fileNames"]
             // @ts-ignore
             .filter((url) => url.includes(".jpg") || url.includes(".mp4"))
             // @ts-ignore
@@ -59,13 +60,13 @@ export default function Home() {
     );
   }
   // console.log(filePaths);
-  const cards = filePaths.map((url) => {
-    const fileSuffix = url.split(".").pop();
+  const cards = fileNames.map((fileName) => {
+    const fileSuffix = fileName.split(".").pop();
     const fileType = fileSuffix == "jpg" ? FileType.IMAGE : FileType.VIDEO;
     return (
       <SimpleFileCard
-        key={url}
-        filePath={url}
+        key={fileName}
+        fileName={fileName}
         fileType={fileType}
         setTar={setTarUrl}
         refresh={getServerSideProps}

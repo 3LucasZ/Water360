@@ -19,6 +19,7 @@ import { electron } from "process";
 import { MouseEventHandler, useEffect, useState } from "react";
 import { CommandButton } from "./CommandButton";
 import { StatusBadge } from "./StatusBadge";
+import path from "path";
 
 export default function Home() {
   //station status
@@ -117,6 +118,13 @@ export default function Home() {
           /> */}
               <CommandButton
                 onClick={async () => {
+                  console.log("client platform:", navigator.platform);
+                  console.log("path:", path);
+                  console.log("path:", path.join("hi", "hi"));
+                  console.log(
+                    "path:",
+                    path.basename("C:\\Documents\\Newsletters\\Summer2018.pdf")
+                  );
                   api("/station/info");
                 }}
                 label="Info"

@@ -4,11 +4,12 @@ import path from "path";
 
 export async function POST(request: NextRequest) {
   //readdir
-  const filePaths = (
+  const fileNames = (
     await readdir(global.downloadsDir, { withFileTypes: true })
   )
     .filter((file) => file.isFile())
-    .map((file) => path.join(global.downloadsDir, file.name));
+    .map((file) => file.name);
+  // .map((file) => path.join(global.downloadsDir, file.name));
   //ret
-  return NextResponse.json({ filePaths }, { status: 200 });
+  return NextResponse.json({ fileNames }, { status: 200 });
 }

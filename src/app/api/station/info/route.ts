@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
   var adbPath = getAdbPath(dirPath);
   var env = process.env.NODE_ENV;
   global.stdout = JSON.stringify(
-    { processPath, dirPath, adbPath, env },
+    { processPath, dirPath, adbPath, env, serverPlatform: process.platform },
     null,
     2
   );
