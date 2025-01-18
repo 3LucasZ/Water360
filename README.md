@@ -20,6 +20,9 @@
 
 Water360 is a desktop application available for Mac and Windows to connect to the Under360 server (https://github.com/3LucasZ/Under360). It enables the remote control of the Insta360 camera.
 
+- [User Guide](https://docs.google.com/presentation/d/1qcOFCgMC9g8j85QJeRglpJVatACQEnYD9MpzV64MNKA/edit#slide=id.g32504d2d859_0_0)
+- [Google Drive of Documentation](https://drive.google.com/drive/u/0/folders/1G_17tz_ecFhs47W5HC7KGipd9fZga4Ta)
+
 ## Usage
 
 1. Find the latest release [here](https://github.com/3LucasZ/Water360/releases).
